@@ -14,11 +14,6 @@ logging:
     com.kakaomobility: debug
     springfox: off
 
-management:
-  health:
-    vault:
-      enabled: false
-
 server:
   error:
     include-stacktrace: always
@@ -61,3 +56,8 @@ spring:
     cluster:
       nodes: localhost:6381
     password: local
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27018
+      database: smooth-coated-otter

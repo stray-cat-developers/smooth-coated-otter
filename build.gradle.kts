@@ -46,11 +46,11 @@ dependencies {
     implementation("com.querydsl:querydsl-core:5.0.0")
     implementation("com.querydsl:querydsl-jpa:5.0.0")
 
-    testImplementation("io.kotest:kotest-runner-junit5:4.6.3")
-    implementation("io.springfox:springfox-boot-starter:3.0.0")
+    testImplementation("io.kotest:kotest-runner-junit5:5.0.2")
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.1")
 
     testImplementation("com.h2database:h2")
-    runtimeOnly("mysql:mysql-connector-java:8.0.19")
+    runtimeOnly("mysql:mysql-connector-java:8.0.25")
 
 }
 

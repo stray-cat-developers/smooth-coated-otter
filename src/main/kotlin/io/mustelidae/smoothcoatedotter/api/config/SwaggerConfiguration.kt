@@ -1,72 +1,54 @@
 package io.mustelidae.smoothcoatedotter.api.config
 
-import com.fasterxml.classmate.TypeResolver
-import io.swagger.annotations.ApiModel
-import io.swagger.annotations.ApiModelProperty
-import org.springframework.beans.factory.annotation.Autowired
+import io.swagger.v3.core.converter.AnnotatedType
+import io.swagger.v3.core.converter.ModelConverters
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.models.Components
+import io.swagger.v3.oas.models.OpenAPI
+import org.springdoc.core.GroupedOpenApi
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
-import springfox.documentation.builders.PathSelectors
-import springfox.documentation.builders.RequestHandlerSelectors
-import springfox.documentation.spi.DocumentationType
-import springfox.documentation.spring.web.plugins.Docket
-import springfox.documentation.swagger.web.UiConfiguration
-import springfox.documentation.swagger.web.UiConfigurationBuilder
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
 
 @Configuration
 class SwaggerConfiguration {
 
-    @Autowired
-    private lateinit var typeResolver: TypeResolver
+    @Bean
+    fun default(): GroupedOpenApi = GroupedOpenApi.builder()
+        .group("API")
+        .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
+        .pathsToMatch("(?!/maintenance).+")
+        .build()
 
     @Bean
-    fun default(): Docket = Docket(DocumentationType.SWAGGER_2)
-        .directModelSubstitute(LocalDate::class.java, String::class.java)
-        .directModelSubstitute(LocalDateTime::class.java, String::class.java)
-        .directModelSubstitute(LocalTime::class.java, String::class.java)
-        .groupName("API")
-        .select()
-        .apis(RequestHandlerSelectors.basePackage("io.mustelidae.smoothcoatedotter.api.domain"))
-        .paths(PathSelectors.regex("(?!/maintenance).+"))
+    fun maintenance(): GroupedOpenApi = GroupedOpenApi.builder()
+        .group("Maintenance")
+        .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
+        .pathsToMatch("/maintenance/**")
         .build()
-        .additionalModels(typeResolver.resolve(GlobalErrorFormat::class.java))
-
-    @Bean
-    fun maintenance(): Docket = Docket(DocumentationType.SWAGGER_2)
-        .directModelSubstitute(LocalDate::class.java, String::class.java)
-        .directModelSubstitute(LocalDateTime::class.java, String::class.java)
-        .directModelSubstitute(LocalTime::class.java, String::class.java)
-        .groupName("Maintenance")
-        .select()
-        .apis(RequestHandlerSelectors.basePackage("io.mustelidae.smoothcoatedotter.api.domain"))
-        .paths(PathSelectors.ant("/maintenance/**"))
-        .build()
-        .additionalModels(typeResolver.resolve(GlobalErrorFormat::class.java))
 
     @Profile("prod")
     @Bean
-    fun uiConfig(): UiConfiguration = UiConfigurationBuilder.builder()
-        .supportedSubmitMethods(UiConfiguration.Constants.NO_SUBMIT_METHODS)
-        .build()
+    fun uiConfig(): OpenAPI = OpenAPI().components(
+        Components().addSchemas(
+            "GlobalError", ModelConverters.getInstance().resolveAsResolvedSchema(AnnotatedType(GlobalErrorFormat::class.java)).schema
+        )
+    )
 }
 
-@ApiModel(description = "Common Error format")
+@Schema(description = "Common Error format")
 data class GlobalErrorFormat(
     val timestamp: String,
-    @ApiModelProperty(value = "Http Status Code")
+    @Schema(name = "Http Status Code")
     val status: Int,
-    @ApiModelProperty(value = "error code")
+    @Schema(name = "error code")
     val code: String,
-    @ApiModelProperty(value = "text displayed to the user")
+    @Schema(name = "text displayed to the user")
     val description: String,
-    @ApiModelProperty(value = "exception message")
+    @Schema(name = "exception message")
     val message: String,
-    @ApiModelProperty(value = "exception name")
+    @Schema(name = "exception name")
     val type: String,
-    @ApiModelProperty(value = "reference error code")
+    @Schema(name = "reference error code")
     val refCode: String
 )
