@@ -16,6 +16,7 @@ enum class ErrorCode(val summary: String) {
     HI02("Invalid header argument"),
 
     P000("policy error"),
+    PC01("checkout error"),
     PD01("develop mistake error"),
     PL01("duplicate request"),
 
