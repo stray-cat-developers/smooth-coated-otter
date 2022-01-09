@@ -27,6 +27,21 @@ class SwaggerConfiguration {
         .pathsToMatch("/maintenance/**")
         .build()
 
+    @Bean
+    fun migration(): GroupedOpenApi = GroupedOpenApi.builder()
+        .group("Migration")
+        .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
+        .pathsToMatch("/migration/**")
+        .build()
+
+    @Bean
+    fun bridge(): GroupedOpenApi = GroupedOpenApi.builder()
+        .group("Bridge")
+        .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
+        .pathsToMatch("/bridge/**")
+        .build()
+
+
     @Profile("prod")
     @Bean
     fun uiConfig(): OpenAPI = OpenAPI().components(
