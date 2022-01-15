@@ -41,8 +41,6 @@ class SwaggerConfiguration {
         .pathsToMatch("/bridge/**")
         .build()
 
-
-    @Profile("prod")
     @Bean
     fun uiConfig(): OpenAPI = OpenAPI().components(
         Components().addSchemas(
