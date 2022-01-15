@@ -1,2 +1,2 @@
 # smooth-coated-otter
-order / booking
+boilerplate
