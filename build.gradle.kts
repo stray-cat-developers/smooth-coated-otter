@@ -15,7 +15,7 @@ plugins {
 
 group = "io.mustelidae.smoothcoatedotter"
 version = "1.0-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
     mavenLocal()
@@ -75,7 +75,7 @@ allOpen {
 tasks.withType<KotlinCompile>().all {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "1.8"
+        jvmTarget = "1.11"
     }
 }
 
