@@ -8,7 +8,7 @@ import java.util.Collections
 import javax.xml.bind.annotation.XmlAnyElement
 import javax.xml.bind.annotation.XmlElementWrapper
 
-@JsonRootName(value = "entities")
+
 open class Replies<T>
 constructor(content: Iterable<T>) : Iterable<T> {
 
