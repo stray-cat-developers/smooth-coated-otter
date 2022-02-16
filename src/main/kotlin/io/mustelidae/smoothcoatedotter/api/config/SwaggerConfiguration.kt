@@ -3,11 +3,13 @@ package io.mustelidae.smoothcoatedotter.api.config
 import io.swagger.v3.core.converter.AnnotatedType
 import io.swagger.v3.core.converter.ModelConverters
 import io.swagger.v3.oas.annotations.media.Schema
-import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import org.springdoc.core.GroupedOpenApi
+import org.springdoc.core.customizers.OpenApiCustomiser
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.util.function.Consumer
+
 
 @Configuration
 class SwaggerConfiguration {
@@ -56,13 +58,6 @@ class SwaggerConfiguration {
         .packagesToScan("io.mustelidae.otter.neotropical.api.domain")
         .pathsToMatch("/v1/bridge/**")
         .build()
-
-    @Bean
-    fun uiConfig(): OpenAPI = OpenAPI().components(
-        Components().addSchemas(
-            "GlobalError", ModelConverters.getInstance().resolveAsResolvedSchema(AnnotatedType(GlobalErrorFormat::class.java)).schema
-        )
-    )
 }
 
 @Schema(name = "Common.Error")
