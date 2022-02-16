@@ -8,7 +8,6 @@ import io.swagger.v3.oas.models.OpenAPI
 import org.springdoc.core.GroupedOpenApi
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
 
 @Configuration
 class SwaggerConfiguration {
@@ -16,29 +15,42 @@ class SwaggerConfiguration {
     @Bean
     fun default(): GroupedOpenApi = GroupedOpenApi.builder()
         .group("API")
-        .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
-        .pathsToMatch("(?!/maintenance).+")
+        .addOpenApiCustomiser {
+            it.info.version("v1")
+        }
+        .packagesToScan("io.mustelidae.otter.neotropical.api.domain")
+        .pathsToMatch("/v1/**")
+        .pathsToExclude("/v1/maintenance/**", "/v1/migration/**", "/v1/bridge/**")
         .build()
 
     @Bean
     fun maintenance(): GroupedOpenApi = GroupedOpenApi.builder()
         .group("Maintenance")
-        .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
-        .pathsToMatch("/maintenance/**")
+        .addOpenApiCustomiser {
+            it.info.version("v1")
+        }
+        .packagesToScan("io.mustelidae.otter.neotropical.api.domain")
+        .pathsToMatch("/v1/maintenance/**")
         .build()
 
     @Bean
     fun migration(): GroupedOpenApi = GroupedOpenApi.builder()
         .group("Migration")
-        .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
-        .pathsToMatch("/migration/**")
+        .addOpenApiCustomiser {
+            it.info.version("v1")
+        }
+        .packagesToScan("io.mustelidae.otter.neotropical.api.domain")
+        .pathsToMatch("/v1/migration/**")
         .build()
 
     @Bean
     fun bridge(): GroupedOpenApi = GroupedOpenApi.builder()
         .group("Bridge")
-        .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
-        .pathsToMatch("/bridge/**")
+        .addOpenApiCustomiser {
+            it.info.version("v1")
+        }
+        .packagesToScan("io.mustelidae.otter.neotropical.api.domain")
+        .pathsToMatch("/v1/bridge/**")
         .build()
 
     @Bean

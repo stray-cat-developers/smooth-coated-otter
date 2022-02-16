@@ -26,7 +26,7 @@ class UserLockInterceptor
                 val key = LockRedisKey(userId).getKey()
 
                 if (stringRedisTemplate.hasKey(key)) {
-                    throw PolicyException(Error(ErrorCode.PL01, "이미 주문이 진행중입니다. 5분 뒤에 다시 시도를 부탁드립니다."))
+                    throw PolicyException(Error(ErrorCode.PL01, "Your order is already in progress. Please try again in 5 minutes."))
                 }
                 stringRedisTemplate.opsForValue()
                     .setIfAbsent(key, LocalDateTime.now().toString(), Duration.ofMinutes(5L))

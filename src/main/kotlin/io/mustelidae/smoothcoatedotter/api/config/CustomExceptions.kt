@@ -3,7 +3,7 @@ package io.mustelidae.smoothcoatedotter.api.config
 import io.mustelidae.smoothcoatedotter.api.common.Error
 import io.mustelidae.smoothcoatedotter.api.common.ErrorCode
 import io.mustelidae.smoothcoatedotter.api.common.ErrorSource
-
+import io.mustelidae.smoothcoatedotter.api.common.ProductCode
 
 open class CustomException(val error: ErrorSource) : RuntimeException(error.message)
 
@@ -31,7 +31,10 @@ class MissingRequestXHeaderException(headerName: String) : HumanException(Error(
 class InvalidArgumentException(message: String) : HumanException(Error(ErrorCode.HI01, message))
 
 open class SystemException(error: ErrorSource) : CustomException(error)
-class DevelopMistakeException(message: String, causeBy: Map<String, Any?>? = null) : SystemException(Error(ErrorCode.PD01, message, causeBy))
+class DevelopMistakeException : SystemException {
+    constructor(errorCode: ErrorCode) : super(Error(errorCode, errorCode.summary))
+    constructor(message: String, causeBy: Map<String, Any?>? = null) : super(Error(ErrorCode.PD01, message, causeBy))
+}
 
 open class CommunicationException(error: ErrorSource) : CustomException(error)
 class ClientException(target: String, message: String, code: String? = null) : CommunicationException(
@@ -87,4 +90,7 @@ open class PolicyException(error: ErrorSource) : CustomException(error)
  */
 open class UnAuthorizedException(error: ErrorSource) : CustomException(error)
 
-class PermissionException(message: String) : UnAuthorizedException(Error(ErrorCode.HA01, message))
+class PermissionException : UnAuthorizedException {
+    constructor() : super(Error(ErrorCode.HA00, "Access denied"))
+    constructor(message: String) : super(Error(ErrorCode.HA01, message))
+}

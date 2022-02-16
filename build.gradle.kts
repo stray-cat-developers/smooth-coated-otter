@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.6.1"
+    id("org.springframework.boot") version "2.6.2"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("org.jmailen.kotlinter") version "3.6.0"
     id("com.avast.gradle.docker-compose") version "0.14.9"
@@ -25,6 +25,7 @@ repositories {
 ext["log4j2.version"] = "2.17.1"
 
 dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.32")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -38,6 +39,7 @@ dependencies {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
         exclude(group = "junit", module = "junit")
     }
+    testImplementation("org.springframework.boot:spring-boot-starter-hateoas")
     kapt("org.springframework.boot:spring-boot-configuration-processor")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -48,10 +50,14 @@ dependencies {
     implementation("com.querydsl:querydsl-core:5.0.0")
     implementation("com.querydsl:querydsl-jpa:5.0.0")
 
-    testImplementation("io.kotest:kotest-runner-junit5:5.0.2")
-    implementation("org.springdoc:springdoc-openapi-ui:1.6.1")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:4.6.3")
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.5")
+    implementation("org.springdoc:springdoc-openapi-kotlin:1.6.5")
 
     testImplementation("com.h2database:h2")
+    runtimeOnly("mysql:mysql-connector-java:8.0.25")
+    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.3.0")
+    testImplementation("org.testcontainers:testcontainers:1.16.3")
     runtimeOnly("mysql:mysql-connector-java:8.0.25")
 
 }
@@ -75,7 +81,7 @@ allOpen {
 tasks.withType<KotlinCompile>().all {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "1.11"
+        jvmTarget = "11"
     }
 }
 
