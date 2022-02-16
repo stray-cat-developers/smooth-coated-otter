@@ -17,6 +17,7 @@ class SwaggerConfiguration {
         .group("API")
         .addOpenApiCustomiser {
             it.info.version("v1")
+            it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
         .packagesToScan("io.mustelidae.otter.neotropical.api.domain")
         .pathsToMatch("/v1/**")
@@ -28,6 +29,7 @@ class SwaggerConfiguration {
         .group("Maintenance")
         .addOpenApiCustomiser {
             it.info.version("v1")
+            it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
         .packagesToScan("io.mustelidae.otter.neotropical.api.domain")
         .pathsToMatch("/v1/maintenance/**")
@@ -38,6 +40,7 @@ class SwaggerConfiguration {
         .group("Migration")
         .addOpenApiCustomiser {
             it.info.version("v1")
+            it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
         .packagesToScan("io.mustelidae.otter.neotropical.api.domain")
         .pathsToMatch("/v1/migration/**")
@@ -48,6 +51,7 @@ class SwaggerConfiguration {
         .group("Bridge")
         .addOpenApiCustomiser {
             it.info.version("v1")
+            it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
         .packagesToScan("io.mustelidae.otter.neotropical.api.domain")
         .pathsToMatch("/v1/bridge/**")
@@ -61,19 +65,19 @@ class SwaggerConfiguration {
     )
 }
 
-@Schema(description = "Common Error format")
+@Schema(name = "Common.Error")
 data class GlobalErrorFormat(
     val timestamp: String,
-    @Schema(name = "Http Status Code")
+    @Schema(description = "Http Status Code")
     val status: Int,
-    @Schema(name = "error code")
+    @Schema(description = "error code")
     val code: String,
-    @Schema(name = "text displayed to the user")
-    val description: String,
-    @Schema(name = "exception message")
+    @Schema(description = "text displayed to the user")
+    val description: String? = null,
+    @Schema(description = "exception message")
     val message: String,
-    @Schema(name = "exception name")
+    @Schema(description = "exception name")
     val type: String,
-    @Schema(name = "reference error code")
-    val refCode: String
+    @Schema(description = "reference error code")
+    val refCode: String? = null
 )
