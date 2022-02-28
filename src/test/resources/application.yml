@@ -26,12 +26,6 @@ spring:
   main:
     allow-bean-definition-overriding: true
     lazy-initialization: true
-
-springdoc:
-  show-actuator: false
-  swagger-ui:
-    enabled: false
-
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:h2:mem:default;DB_CLOSE_ON_EXIT=FALSE;AUTOCOMMIT=OFF;TRACE_LEVEL_FILE=2
@@ -58,6 +52,10 @@ springdoc:
             audit_strategy: org.hibernate.envers.strategy.DefaultAuditStrategy
     database-platform: org.hibernate.dialect.H2Dialect
 
+springdoc:
+  show-actuator: false
+  swagger-ui:
+    enabled: false
 ---
 spring:
   config:
