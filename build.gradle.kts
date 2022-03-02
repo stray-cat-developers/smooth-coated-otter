@@ -5,12 +5,12 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("org.jmailen.kotlinter") version "3.6.0"
     id("com.avast.gradle.docker-compose") version "0.14.9"
-    kotlin("jvm") version "1.5.32"
-    kotlin("plugin.spring") version "1.5.32"
-    kotlin("plugin.jpa") version "1.5.32"
-    kotlin("plugin.allopen") version "1.5.32"
-    kotlin("plugin.noarg") version "1.5.32"
-    kotlin("kapt") version "1.5.32"
+    kotlin("jvm") version "1.6.10"
+    kotlin("plugin.spring") version "1.6.10"
+    kotlin("plugin.jpa") version "1.6.10"
+    kotlin("plugin.allopen") version "1.6.10"
+    kotlin("plugin.noarg") version "1.6.10"
+    kotlin("kapt") version "1.6.10"
 }
 
 group = "io.mustelidae.smoothcoatedotter"
@@ -25,7 +25,7 @@ repositories {
 ext["log4j2.version"] = "2.17.1"
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.32")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -50,13 +50,13 @@ dependencies {
     implementation("com.querydsl:querydsl-core:5.0.0")
     implementation("com.querydsl:querydsl-jpa:5.0.0")
 
-    testImplementation("io.kotest:kotest-runner-junit5-jvm:4.6.3")
-    implementation("org.springdoc:springdoc-openapi-ui:1.6.5")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:5.1.0")
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.6")
     implementation("org.springdoc:springdoc-openapi-kotlin:1.6.5")
 
     testImplementation("com.h2database:h2")
     runtimeOnly("mysql:mysql-connector-java:8.0.25")
-    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.3.0")
+    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.3.1")
     testImplementation("org.testcontainers:testcontainers:1.16.3")
     runtimeOnly("mysql:mysql-connector-java:8.0.25")
 
