@@ -50,7 +50,7 @@ dependencies {
     implementation("com.querydsl:querydsl-core:5.0.0")
     implementation("com.querydsl:querydsl-jpa:5.0.0")
 
-    testImplementation("io.kotest:kotest-runner-junit5-jvm:4.6.3")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:5.1.0")
     implementation("org.springdoc:springdoc-openapi-ui:1.6.6")
     implementation("org.springdoc:springdoc-openapi-kotlin:1.6.5")
 
