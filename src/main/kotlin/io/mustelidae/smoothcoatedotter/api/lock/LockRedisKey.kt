@@ -11,7 +11,7 @@ class LockRedisKey(
     }
 
     companion object {
-        private const val KEY = "lock:user:"
+        private const val KEY = "${RedisKey.PREFIX}:lock:user:"
     }
 
 }
