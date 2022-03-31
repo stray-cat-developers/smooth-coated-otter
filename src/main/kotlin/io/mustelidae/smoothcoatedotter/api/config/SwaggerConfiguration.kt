@@ -16,7 +16,7 @@ class SwaggerConfiguration {
             it.info.version("v1")
             it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
-        .packagesToScan("io.mustelidae.otter.neotropical.api.domain")
+        .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
         .pathsToMatch("/v1/**")
         .pathsToExclude("/v1/maintenance/**", "/v1/migration/**", "/v1/bridge/**")
         .build()
@@ -28,7 +28,7 @@ class SwaggerConfiguration {
             it.info.version("v1")
             it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
-        .packagesToScan("io.mustelidae.otter.neotropical.api.domain")
+        .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
         .pathsToMatch("/v1/maintenance/**")
         .build()
 
@@ -39,7 +39,7 @@ class SwaggerConfiguration {
             it.info.version("v1")
             it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
-        .packagesToScan("io.mustelidae.otter.neotropical.api.domain")
+        .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
         .pathsToMatch("/v1/migration/**")
         .build()
 
@@ -50,7 +50,7 @@ class SwaggerConfiguration {
             it.info.version("v1")
             it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
-        .packagesToScan("io.mustelidae.otter.neotropical.api.domain")
+        .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
         .pathsToMatch("/v1/bridge/**")
         .build()
 }
