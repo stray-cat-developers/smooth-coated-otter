@@ -30,7 +30,7 @@ class AuditorAwareImpl : AuditorAware<String> {
             val partnerId = request.getHeader(RoleHeader.XPartner.KEY)
             val userId = request.getHeader(RoleHeader.XUser.KEY)
 
-            auditor = adminId?.let { "A:".plus(it) } ?: partnerId?.let { "P:".plus(it) }?: userId?.let { "U:".plus(it) }?:  unknownAuditor
+            auditor = adminId?.let { "A:".plus(it) } ?: partnerId?.let { "P:".plus(it) } ?: userId?.let { "U:".plus(it) } ?: unknownAuditor
         }
         return Optional.of(auditor)
     }

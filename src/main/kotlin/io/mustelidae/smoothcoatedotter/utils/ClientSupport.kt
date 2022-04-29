@@ -3,9 +3,9 @@ package io.mustelidae.smoothcoatedotter.utils
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.mustelidae.smoothcoatedotter.api.common.Error
+import io.mustelidae.smoothcoatedotter.api.common.ErrorCode
 import io.mustelidae.smoothcoatedotter.api.config.CommunicationException
 import io.mustelidae.smoothcoatedotter.api.config.GlobalErrorFormat
-import io.mustelidae.smoothcoatedotter.api.common.ErrorCode
 import org.apache.hc.client5.http.classic.methods.HttpDelete
 import org.apache.hc.client5.http.classic.methods.HttpGet
 import org.apache.hc.client5.http.classic.methods.HttpPatch

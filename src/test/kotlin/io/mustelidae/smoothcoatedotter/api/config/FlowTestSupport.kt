@@ -1,6 +1,5 @@
 package io.mustelidae.smoothcoatedotter.api.config
 
-
 import io.mustelidae.smoothcoatedotter.SmoothCoatedOtterApplication
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired

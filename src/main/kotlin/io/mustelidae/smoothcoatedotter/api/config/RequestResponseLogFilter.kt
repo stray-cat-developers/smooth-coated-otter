@@ -98,16 +98,16 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
         val uri = request.requestURI
 
         return (
-                uri.startsWith("/health")
-                        || uri.startsWith("/favicon.ico")
-                        || uri.startsWith("/h2-console")
-                        || uri.startsWith("/actuator/health")
-                        || uri.startsWith("/webjars/springfox-swagger-ui")
-                        || uri.startsWith("/swagger-ui/")
-                        || uri.startsWith("/swagger-ui.html")
-                        || uri.startsWith("/swagger-ui/index.html")
-                        || uri.startsWith("/v3/api-docs")
-                )
+            uri.startsWith("/health") ||
+                uri.startsWith("/favicon.ico") ||
+                uri.startsWith("/h2-console") ||
+                uri.startsWith("/actuator/health") ||
+                uri.startsWith("/webjars/springfox-swagger-ui") ||
+                uri.startsWith("/swagger-ui/") ||
+                uri.startsWith("/swagger-ui.html") ||
+                uri.startsWith("/swagger-ui/index.html") ||
+                uri.startsWith("/v3/api-docs")
+            )
     }
 }
 

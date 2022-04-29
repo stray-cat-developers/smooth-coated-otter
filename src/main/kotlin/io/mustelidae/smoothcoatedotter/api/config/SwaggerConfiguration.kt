@@ -5,7 +5,6 @@ import org.springdoc.core.GroupedOpenApi
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
-
 @Configuration
 class SwaggerConfiguration {
 
@@ -54,4 +53,3 @@ class SwaggerConfiguration {
         .pathsToMatch("/v1/bridge/**")
         .build()
 }
-

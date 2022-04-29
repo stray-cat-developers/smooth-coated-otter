@@ -4,7 +4,7 @@ import io.mustelidae.smoothcoatedotter.api.config.redis.RedisKey
 
 class LockRedisKey(
     private val userId: String
-): RedisKey {
+) : RedisKey {
 
     override fun getKey(): String {
         return KEY + userId
@@ -13,5 +13,4 @@ class LockRedisKey(
     companion object {
         private const val KEY = "${RedisKey.PREFIX}:lock:user:"
     }
-
 }

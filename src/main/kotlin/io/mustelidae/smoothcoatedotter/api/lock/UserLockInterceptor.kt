@@ -23,13 +23,13 @@ class UserLockInterceptor
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
         val userId = request.getHeader(RoleHeader.XUser.KEY) ?: return true
         if (handler is HandlerMethod && handler.hasMethodAnnotation(EnableUserLock::class.java)) {
-                val key = LockRedisKey(userId).getKey()
+            val key = LockRedisKey(userId).getKey()
 
-                if (stringRedisTemplate.hasKey(key)) {
-                    throw PolicyException(Error(ErrorCode.PL01, "Your order is already in progress. Please try again in 5 minutes."))
-                }
-                stringRedisTemplate.opsForValue()
-                    .setIfAbsent(key, LocalDateTime.now().toString(), Duration.ofMinutes(5L))
+            if (stringRedisTemplate.hasKey(key)) {
+                throw PolicyException(Error(ErrorCode.PL01, "Your order is already in progress. Please try again in 5 minutes."))
+            }
+            stringRedisTemplate.opsForValue()
+                .setIfAbsent(key, LocalDateTime.now().toString(), Duration.ofMinutes(5L))
         }
 
         return true

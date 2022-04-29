@@ -1,13 +1,11 @@
 package io.mustelidae.smoothcoatedotter.api.common
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonRootName
 import org.springframework.util.Assert
 import java.util.ArrayList
 import java.util.Collections
 import javax.xml.bind.annotation.XmlAnyElement
 import javax.xml.bind.annotation.XmlElementWrapper
-
 
 open class Replies<T>
 constructor(content: Iterable<T>) : Iterable<T> {

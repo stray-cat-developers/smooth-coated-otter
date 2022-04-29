@@ -1,6 +1,7 @@
 package io.mustelidae.smoothcoatedotter.api.config
 
 import io.mustelidae.smoothcoatedotter.api.lock.UserLockInterceptor
+import io.mustelidae.smoothcoatedotter.api.scope.BlockCertainProfileInterceptor
 import io.mustelidae.smoothcoatedotter.utils.Jackson
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
@@ -18,11 +19,13 @@ import java.time.format.DateTimeFormatter
 @Configuration
 @ControllerAdvice
 class WebConfiguration(
-    private val userLockInterceptor: UserLockInterceptor
+    private val userLockInterceptor: UserLockInterceptor,
+    private val blockCertainProfileInterceptor: BlockCertainProfileInterceptor
 ) : DelegatingWebMvcConfiguration() {
 
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(userLockInterceptor)
+        registry.addInterceptor(blockCertainProfileInterceptor)
         super.addInterceptors(registry)
     }
 

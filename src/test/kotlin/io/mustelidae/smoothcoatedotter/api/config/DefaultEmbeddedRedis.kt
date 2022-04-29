@@ -1,6 +1,5 @@
 package io.mustelidae.smoothcoatedotter.api.config
 
-
 import io.mustelidae.smoothcoatedotter.api.common.Constant
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties
 import org.springframework.boot.test.context.TestConfiguration

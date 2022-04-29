@@ -3,7 +3,6 @@ package io.mustelidae.smoothcoatedotter.api.config
 import io.mustelidae.smoothcoatedotter.api.common.Error
 import io.mustelidae.smoothcoatedotter.api.common.ErrorCode
 import io.mustelidae.smoothcoatedotter.api.common.ErrorSource
-import io.mustelidae.smoothcoatedotter.api.common.ProductCode
 
 open class CustomException(val error: ErrorSource) : RuntimeException(error.message)
 
@@ -94,3 +93,5 @@ class PermissionException : UnAuthorizedException {
     constructor() : super(Error(ErrorCode.HA00, "Access denied"))
     constructor(message: String) : super(Error(ErrorCode.HA01, message))
 }
+
+class AccessDeniedException : UnAuthorizedException(Error(ErrorCode.HA00, "Unauthorized"))

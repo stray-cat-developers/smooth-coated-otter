@@ -1,7 +1,5 @@
 package io.mustelidae.smoothcoatedotter.api.permission
 
-
-
 class UserPermission(
     private val id: Long
 ) : Permission {

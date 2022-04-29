@@ -4,7 +4,7 @@ import io.kotest.matchers.shouldBe
 import io.mustelidae.smoothcoatedotter.api.config.FlowTestSupport
 import org.junit.jupiter.api.Test
 
-internal class SampleControllerTest: FlowTestSupport() {
+internal class SampleControllerTest : FlowTestSupport() {
 
     @Test
     fun helloWorld() {
