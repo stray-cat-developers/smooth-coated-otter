@@ -80,6 +80,10 @@ allOpen {
     annotation("javax.persistence.Embeddable")
 }
 
+tasks.check {
+    dependsOn("installKotlinterPrePushHook")
+}
+
 tasks.withType<KotlinCompile>().all {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
