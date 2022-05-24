@@ -58,7 +58,6 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java:8.0.25")
     testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.3.1")
     testImplementation("org.testcontainers:testcontainers:1.16.3")
-    runtimeOnly("mysql:mysql-connector-java:8.0.25")
 
     implementation("org.apache.httpcomponents.client5:httpclient5:5.1.3")
 
