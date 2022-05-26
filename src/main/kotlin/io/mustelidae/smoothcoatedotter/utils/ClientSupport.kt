@@ -108,7 +108,7 @@ open class ClientSupport(
         headers: List<Pair<String, Any>>,
         params: List<Pair<String, Any?>>? = null
     ): CloseableHttpResponse {
-        val queryString = params?.joinToString("&") { "{${it.first}}=${it.second}" }
+        val queryString = params?.joinToString("&") { "${it.first}=${it.second}" }
         val uri = if (queryString.isNullOrBlank().not()) url + queryString?.let { "?$it" } else url
         val delete = HttpDelete(uri).apply {
             headers.forEach {
@@ -124,7 +124,7 @@ open class ClientSupport(
         headers: List<Pair<String, Any>>,
         params: List<Pair<String, Any?>>? = null
     ): CloseableHttpResponse {
-        val queryString = params?.joinToString("&") { "{${it.first}}=${it.second}" }
+        val queryString = params?.joinToString("&") { "${it.first}=${it.second}" }
         val uri = if (queryString.isNullOrBlank().not()) url + queryString?.let { "?$it" } else url
         val get = HttpGet(uri).apply {
             headers.forEach {
