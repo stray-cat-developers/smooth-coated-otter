@@ -46,12 +46,13 @@ spring:
         format_sql: false
         use_sql_comments: false
         default_batch_fetch_size: 50
+        enable_lazy_load_no_trans: false        
       org:
         hibernate:
           envers:
             audit_strategy: org.hibernate.envers.strategy.DefaultAuditStrategy
     database-platform: org.hibernate.dialect.H2Dialect
-
+    open-in-view: false
 springdoc:
   show-actuator: false
   swagger-ui:
