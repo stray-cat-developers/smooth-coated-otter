@@ -139,7 +139,7 @@ open class ClientSupport(
         val response = EntityUtils.toString(this.entity, Charset.defaultCharset())
         writeLog(response)
 
-        if (writeLog && this.isOK().not()) {
+        if (this.isOK().not()) {
             val error = if (response.isNullOrEmpty()) {
                 Error(ErrorCode.C000, this.reasonPhrase)
             } else {
@@ -167,7 +167,7 @@ open class ClientSupport(
         val response = EntityUtils.toString(this.entity, Charset.defaultCharset())
         writeLog(response)
 
-        if (writeLog && this.isOK().not()) {
+        if (this.isOK().not()) {
             val error = if (response.isNullOrEmpty()) {
                 Error(ErrorCode.C000, this.reasonPhrase)
             } else {
@@ -189,7 +189,7 @@ open class ClientSupport(
 
     private fun writeLog(response: String) {
         if (writeLog) {
-            log.error("-- error --\n$response")
+            log.info("-- response --\n$response")
         }
     }
 
