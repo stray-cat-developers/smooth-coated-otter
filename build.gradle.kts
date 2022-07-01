@@ -79,7 +79,7 @@ allOpen {
     annotation("javax.persistence.Embeddable")
 }
 
-tasks.check {
+tasks.build {
     dependsOn("installKotlinterPrePushHook")
 }
 
