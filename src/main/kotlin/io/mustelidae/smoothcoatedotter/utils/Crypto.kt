@@ -9,7 +9,7 @@ class Crypto(
     key: String
 ) {
 
-    private val iv = IvParameterSpec("cCaJdltxT15KxPw".toByteArray())
+    private val iv = IvParameterSpec("s42vYaZqtnkmTov8".toByteArray())
     private val algorithm = "AES/CBC/PKCS5Padding"
     private val keySpec = SecretKeySpec(key.toByteArray(), "AES")
     private val cipher = Cipher.getInstance(algorithm)
