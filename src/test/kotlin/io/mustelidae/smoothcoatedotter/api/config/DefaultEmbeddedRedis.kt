@@ -1,6 +1,7 @@
 package io.mustelidae.smoothcoatedotter.api.config
 
 import io.mustelidae.smoothcoatedotter.api.common.Constant
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
@@ -20,33 +21,20 @@ import javax.annotation.PreDestroy
 class DefaultEmbeddedRedis(
     private val properties: RedisProperties
 ) {
-    private var redis: GenericContainer<Nothing>? = null
-    @PostConstruct
-    @Throws(IOException::class, URISyntaxException::class)
-    fun startRedis() {
-        redis = GenericContainer<Nothing>("redis:5.0.13-alpine")
-            .apply {
-                withExposedPorts(6379)
-            }
 
-        redis!!.start()
-    }
-
-    @PreDestroy
-    fun stopRedis() {
-        redis!!.stop()
-    }
+    @Value("\${embedded-redis.port:-1}")
+    var port: Int = 0
 
     @Bean
     fun redisClusterConfiguration(): RedisClusterConfiguration {
         return RedisClusterConfiguration(
-            listOf("${properties.host}:${redis!!.firstMappedPort}")
+            listOf("${properties.host}:${port}")
         )
     }
 
     @Bean(name = [Constant.Redis.USER_LOCK])
     fun userLockRedisTemplate(): StringRedisTemplate {
-        val configuration = RedisStandaloneConfiguration(properties.host, redis!!.firstMappedPort)
+        val configuration = RedisStandaloneConfiguration(properties.host, port)
         val factory = LettuceConnectionFactory(configuration).apply {
             afterPropertiesSet()
         }
