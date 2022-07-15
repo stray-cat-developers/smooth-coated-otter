@@ -1,5 +1,6 @@
 package io.mustelidae.smoothcoatedotter.api.config
 
+import com.asarkar.spring.test.redis.AutoConfigureEmbeddedRedis
 import io.mustelidae.smoothcoatedotter.SmoothCoatedOtterApplication
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc
 @SpringBootTest(classes = [SmoothCoatedOtterApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = [DefaultEmbeddedMongo::class, DefaultEmbeddedRedis::class])
 @AutoConfigureMockMvc
+@AutoConfigureEmbeddedRedis(port = 0)
 class FlowTestSupport {
 
     @Autowired
