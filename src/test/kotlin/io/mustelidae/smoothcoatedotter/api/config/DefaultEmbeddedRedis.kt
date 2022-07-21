@@ -10,11 +10,6 @@ import org.springframework.data.redis.connection.RedisClusterConfiguration
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 import org.springframework.data.redis.core.StringRedisTemplate
-import org.testcontainers.containers.GenericContainer
-import java.io.IOException
-import java.net.URISyntaxException
-import javax.annotation.PostConstruct
-import javax.annotation.PreDestroy
 
 @Lazy(false)
 @TestConfiguration
