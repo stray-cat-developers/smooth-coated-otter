@@ -23,7 +23,7 @@ class DefaultEmbeddedRedis(
     @Bean
     fun redisClusterConfiguration(): RedisClusterConfiguration {
         return RedisClusterConfiguration(
-            listOf("${properties.host}:${port}")
+            listOf("${properties.host}:$port")
         )
     }
 
