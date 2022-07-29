@@ -83,8 +83,8 @@ class SwaggerConfiguration {
         .build()
 
     @Bean
-    fun test(): GroupedOpenApi = GroupedOpenApi.builder()
-        .group("Test")
+    fun internalDevelopment(): GroupedOpenApi = GroupedOpenApi.builder()
+        .group("Internal-Development")
         .addOpenApiCustomiser {
             it.info.version("v1")
             it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
