@@ -1,5 +1,8 @@
 package io.mustelidae.smoothcoatedotter.api.common
 
+import io.swagger.v3.oas.annotations.media.Schema
+
+@Schema(name = "Boilerplate.ErrorCode", enumAsRef = true)
 enum class ErrorCode(val summary: String) {
 
     H000("Human error"),
@@ -27,5 +30,9 @@ enum class ErrorCode(val summary: String) {
 
     C000("communication error"),
     CT01("connection timeout"),
-    CT02("read timeout"),
+    CT02("read timeout");
+
+    override fun toString(): String {
+        return "${this.name}::${this.summary}"
+    }
 }

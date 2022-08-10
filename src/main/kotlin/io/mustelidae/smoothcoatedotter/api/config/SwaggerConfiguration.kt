@@ -13,7 +13,6 @@ class SwaggerConfiguration {
         .group("API")
         .addOpenApiCustomiser {
             it.info.version("v1")
-            it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
         .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
         .pathsToMatch("/v1/**")
@@ -23,6 +22,7 @@ class SwaggerConfiguration {
             "/v1/bridge/**",
             "/v1/batch/**",
             "/v1/gateway/**",
+            "/v1/open-api/**",
             "/v1/internal-development/**"
         )
         .build()
@@ -32,7 +32,6 @@ class SwaggerConfiguration {
         .group("Maintenance")
         .addOpenApiCustomiser {
             it.info.version("v1")
-            it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
         .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
         .pathsToMatch("/v1/maintenance/**")
@@ -43,7 +42,6 @@ class SwaggerConfiguration {
         .group("Migration")
         .addOpenApiCustomiser {
             it.info.version("v1")
-            it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
         .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
         .pathsToMatch("/v1/migration/**")
@@ -54,7 +52,6 @@ class SwaggerConfiguration {
         .group("Bridge")
         .addOpenApiCustomiser {
             it.info.version("v1")
-            it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
         .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
         .pathsToMatch("/v1/bridge/**")
@@ -65,7 +62,6 @@ class SwaggerConfiguration {
         .group("Batch")
         .addOpenApiCustomiser {
             it.info.version("v1")
-            it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
         .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
         .pathsToMatch("/v1/batch/**")
@@ -76,10 +72,19 @@ class SwaggerConfiguration {
         .group("Gateway")
         .addOpenApiCustomiser {
             it.info.version("v1")
-            it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
         .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
         .pathsToMatch("/v1/gateway/**")
+        .build()
+
+    @Bean
+    fun openApi(): GroupedOpenApi = GroupedOpenApi.builder()
+        .group("Open-API")
+        .addOpenApiCustomiser {
+            it.info.version("v1")
+        }
+        .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
+        .pathsToMatch("/v1/open-api/**")
         .build()
 
     @Bean
@@ -87,7 +92,6 @@ class SwaggerConfiguration {
         .group("Internal-Development")
         .addOpenApiCustomiser {
             it.info.version("v1")
-            it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
         .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
         .pathsToMatch("/v1/internal-development/**")

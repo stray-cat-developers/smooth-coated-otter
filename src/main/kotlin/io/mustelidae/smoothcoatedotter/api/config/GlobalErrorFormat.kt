@@ -1,14 +1,14 @@
 package io.mustelidae.smoothcoatedotter.api.config
 
+import io.mustelidae.smoothcoatedotter.api.common.ErrorCode
 import io.swagger.v3.oas.annotations.media.Schema
 
-@Schema(name = "Common.Error")
+@Schema(name = "Boilerplate.Error")
 data class GlobalErrorFormat(
+    @Schema(description = "error occurred time")
     val timestamp: String,
-    @Schema(description = "Http Status Code")
-    val status: Int,
     @Schema(description = "error code")
-    val code: String,
+    val code: ErrorCode,
     @Schema(description = "text displayed to the user")
     val description: String? = null,
     @Schema(description = "exception message")
