@@ -13,7 +13,7 @@ logging:
     io.swagger.models.parameters.AbstractSerializableParameter: error
     org.mongodb.driver.protocol.command: debug
     org.springframework.data.redis: debug
-    io.mustelidae.otter.smoothcoatedotter: debug
+    io.mustelidae.otter.sumatrana: debug
 
 server:
   error:
