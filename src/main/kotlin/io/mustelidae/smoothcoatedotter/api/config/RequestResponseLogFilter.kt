@@ -27,26 +27,28 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
+    override fun doFilterInternal(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        filterChain: FilterChain
+    ) {
         val isAsync = isAsyncDispatch(request)
         val startTime = System.currentTimeMillis()
 
-        if (isSkipUri(request)) {
+        if (isSkipUri(request) || isAsync) {
             filterChain.doFilter(request, response)
         } else {
-            if (isAsync) {
-                filterChain.doFilter(request, response)
-            } else {
-                val multiReadRequest = request as? MultiReadHttpServletRequest ?: MultiReadHttpServletRequest(request)
-                val wrappedResponse = response as? ContentCachingResponseWrapper ?: ContentCachingResponseWrapper(response)
+            val multiReadRequest = request as? MultiReadHttpServletRequest ?: MultiReadHttpServletRequest(request)
+            val wrappedResponse =
+                response as? ContentCachingResponseWrapper ?: ContentCachingResponseWrapper(response)
 
-                try {
-                    beforeRequest(multiReadRequest)
-                    filterChain.doFilter(multiReadRequest, wrappedResponse)
-                } finally {
-                    afterRequest(multiReadRequest, wrappedResponse, startTime)
-                    wrappedResponse.copyBodyToResponse()
-                }
+            val requestBody = readBody(multiReadRequest)
+            try {
+                beforeRequest(multiReadRequest)
+                filterChain.doFilter(multiReadRequest, wrappedResponse)
+            } finally {
+                afterRequest(multiReadRequest, wrappedResponse, startTime, requestBody)
+                wrappedResponse.copyBodyToResponse()
             }
         }
     }
@@ -56,24 +58,34 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
         request.getSession(false)?.let { msg.append(";session=").append(it.id) }
         request.remoteUser?.let { msg.append(";user=").append(it) }
         msg.append(";headers=").append(ServletServerHttpRequest(request).headers)
-        readBody(request)?.let { msg.append(";payload=").append(PrivacyLogFilter.masking(it)) }
         log.info(msg.toString())
     }
 
-    private fun afterRequest(request: HttpServletRequest, wrappedResponse: ContentCachingResponseWrapper, startTime: Long) {
+    private fun afterRequest(
+        request: HttpServletRequest,
+        wrappedResponse: ContentCachingResponseWrapper,
+        startTime: Long,
+        requestBody: String? = null
+    ) {
         val msg = loggingMessage(afterMessagePrefix, request)
 
-        request.queryString?.let { msg.append('?').append(it) }
-        request.remoteAddr?.let { msg.append(";client=").append(it) }
         msg.append(";status=").append(wrappedResponse.status)
         msg.append(";latency=").append(System.currentTimeMillis() - startTime).append("ms")
 
         if (HttpStatus.valueOf(wrappedResponse.status).is2xxSuccessful) {
+            if (log.isDebugEnabled)
+                appendMaskingRequestBody(requestBody, msg)
+
             log.info(msg.toString())
         } else {
-            wrappedResponse.contentAsByteArray.let { msg.append(";payload=").append(it.toString(defaultCharset)) }
-            log.debug(msg.toString())
+            appendMaskingRequestBody(requestBody, msg)
+            wrappedResponse.contentAsByteArray.let { msg.append(";response-payload=").append(it.toString(defaultCharset)) }
+            log.error(msg.toString())
         }
+    }
+
+    private fun appendMaskingRequestBody(requestBody: String?, msg: StringBuilder) {
+        requestBody?.let { msg.append(";request-payload=").append(PrivacyLogFilter.masking(it)) }
     }
 
     private fun loggingMessage(prefix: String, request: HttpServletRequest): StringBuilder {
@@ -82,7 +94,6 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
         msg.append(";uri=").append(request.requestURI)
 
         request.queryString?.let { msg.append('?').append(it) }
-        request.remoteAddr?.let { msg.append(";client=").append(it) }
         return msg
     }
 
@@ -98,16 +109,17 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
         val uri = request.requestURI
 
         return (
-            uri.startsWith("/health") ||
-                uri.startsWith("/favicon.ico") ||
-                uri.startsWith("/h2-console") ||
-                uri.startsWith("/actuator/health") ||
-                uri.startsWith("/webjars/springfox-swagger-ui") ||
-                uri.startsWith("/swagger-ui/") ||
-                uri.startsWith("/swagger-ui.html") ||
-                uri.startsWith("/swagger-ui/index.html") ||
-                uri.startsWith("/v3/api-docs")
-            )
+                uri.startsWith("/health") ||
+                        uri.startsWith("/favicon.ico") ||
+                        uri.startsWith("/h2-console") ||
+                        uri.startsWith("/actuator/health") ||
+                        uri.startsWith("/webjars/springfox-swagger-ui") ||
+                        uri.startsWith("/swagger-ui/") ||
+                        uri.startsWith("/swagger-ui.html") ||
+                        uri.startsWith("/swagger-ui/index.html") ||
+                        uri.startsWith("/v3/api-docs") ||
+                        uri.startsWith("/v2/api-docs")
+                )
     }
 }
 
