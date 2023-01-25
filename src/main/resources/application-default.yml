@@ -1,6 +1,6 @@
 logging:
   level:
-    org.springframework.web.filter.CommonsRequestLoggingFilter: debug
+    org.springframework.web.servlet: info
     org.springframework.boot.actuate: off
     org.springframework.web: debug
     org.springframework.boot: info
@@ -11,7 +11,9 @@ logging:
     org.hibernate.tool.schema: error
     com.zaxxer.hikari: error
     io.swagger.models.parameters.AbstractSerializableParameter: error
-    io.mustelidae.otter.neotropical: debug
+    org.mongodb.driver.protocol.command: debug
+    org.springframework.data.redis: debug
+    io.mustelidae.otter.smoothcoatedotter: debug
 
 server:
   error:
@@ -44,7 +46,7 @@ spring:
       connection-test-query: SELECT 1 FROM DUAL
       minimum-idle: 3
       maximum-pool-size: 30
-      pool-name: SpirngBootHikariCP
+      pool-name: SpringBootHikariCP
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://127.0.0.1:3319/smooth-coated-otter?serverTimezone=Asia/Seoul
