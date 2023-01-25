@@ -13,7 +13,7 @@ plugins {
     kotlin("kapt") version "1.7.21"
 }
 
-group = "io.mustelidae.smoothcoatedotter"
+group = "io.mustelidae.otter.sumatrana"
 version = "1.0-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
