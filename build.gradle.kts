@@ -1,16 +1,16 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.6.2"
+    id("org.springframework.boot") version "2.7.8"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("org.jmailen.kotlinter") version "3.6.0"
     id("com.avast.gradle.docker-compose") version "0.14.9"
-    kotlin("jvm") version "1.6.10"
-    kotlin("plugin.spring") version "1.6.10"
-    kotlin("plugin.jpa") version "1.6.10"
-    kotlin("plugin.allopen") version "1.6.10"
-    kotlin("plugin.noarg") version "1.6.10"
-    kotlin("kapt") version "1.6.10"
+    kotlin("jvm") version "1.7.21"
+    kotlin("plugin.spring") version "1.7.21"
+    kotlin("plugin.jpa") version "1.7.21"
+    kotlin("plugin.allopen") version "1.7.21"
+    kotlin("plugin.noarg") version "1.7.21"
+    kotlin("kapt") version "1.7.21"
 }
 
 group = "io.mustelidae.smoothcoatedotter"
@@ -25,7 +25,7 @@ repositories {
 ext["log4j2.version"] = "2.17.1"
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.21")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -46,16 +46,16 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
 
-    kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
-    implementation("com.querydsl:querydsl-core:5.0.0")
-    implementation("com.querydsl:querydsl-jpa:5.0.0")
+    kapt("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties["querydsl.version"]}:jpa")
+    implementation("com.querydsl:querydsl-core")
+    implementation("com.querydsl:querydsl-jpa")
 
     testImplementation("io.kotest:kotest-runner-junit5-jvm:5.1.0")
     implementation("org.springdoc:springdoc-openapi-ui:1.6.6")
     implementation("org.springdoc:springdoc-openapi-kotlin:1.6.5")
 
     testImplementation("com.h2database:h2")
-    runtimeOnly("mysql:mysql-connector-java:8.0.25")
+    runtimeOnly("mysql:mysql-connector-java:8.0.28")
     testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.3.1")
     testImplementation("com.asarkar.spring:embedded-redis-spring:1.1.1")
 
