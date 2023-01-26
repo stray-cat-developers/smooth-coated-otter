@@ -1,5 +1,5 @@
 # sumatrana-otter
-This is an application that allows you to use Slack in the installed Sentry.
+Webhook forwarder
 
 # Requirements
 JDK 11
