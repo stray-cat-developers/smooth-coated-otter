@@ -9,9 +9,9 @@ class SentryResources {
 
     data class Payload (
         @JsonProperty("action") val action : String,
-        @JsonProperty("actor") val actor : Actor,
         @JsonProperty("data") val data : Data,
-        @JsonProperty("installation") val installation : Installation
+        @JsonProperty("installation") val installation : Installation,
+        @JsonProperty("actor") val actor : Actor? = null,
     ) {
         data class Actor(
             @JsonProperty("id") val id: String? = null,
@@ -21,6 +21,7 @@ class SentryResources {
 
         data class Data(
             @JsonProperty("event") val event: Event? = null,
+            @JsonProperty("error") val error: Event? = null,
             @JsonProperty("triggered_rule") val triggeredRule: String? = null,
             @JsonProperty("issue_alert") val issueAlert: IssueAlert? = null
         ) {
@@ -29,6 +30,7 @@ class SentryResources {
                 @JsonProperty("_ref_version") val refVersion: Int? = null,
                 @JsonProperty("contexts") val contexts: Contexts? = null,
                 @JsonProperty("culprit") val culprit: String? = null,
+                @JsonProperty("culprit") val environment: String? = null,
                 @JsonProperty("datetime") val datetime: String? = null,
                 @JsonProperty("dist") val dist: String? = null,
                 @JsonProperty("event_id") val eventId: String? = null,

@@ -49,7 +49,7 @@ constructor(content: Iterable<T>) : Iterable<T> {
             return false
         }
 
-        val that = other as io.mustelidae.otter.sumatrana.api.common.Replies<*>?
+        val that = other as Replies<*>?
 
         val contentEqual = if (this.content == null) that!!.content == null else this.content == that!!.content
         return if (contentEqual) super.equals(other) else contentEqual
@@ -64,5 +64,5 @@ constructor(content: Iterable<T>) : Iterable<T> {
     }
 }
 
-fun <T> List<T>.toReplies(): io.mustelidae.otter.sumatrana.api.common.Replies<T> =
-    io.mustelidae.otter.sumatrana.api.common.Replies(this)
+fun <T> List<T>.toReplies(): Replies<T> =
+    Replies(this)

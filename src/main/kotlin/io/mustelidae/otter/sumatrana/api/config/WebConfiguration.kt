@@ -1,6 +1,5 @@
 package io.mustelidae.otter.sumatrana.api.config
 
-import io.mustelidae.otter.sumatrana.api.lock.UserLockInterceptor
 import io.mustelidae.otter.sumatrana.api.scope.BlockCertainProfileInterceptor
 import io.mustelidae.otter.sumatrana.utils.Jackson
 import org.springframework.boot.web.servlet.FilterRegistrationBean
@@ -19,12 +18,10 @@ import java.time.format.DateTimeFormatter
 @Configuration
 @ControllerAdvice
 class WebConfiguration(
-    private val userLockInterceptor: UserLockInterceptor,
     private val blockCertainProfileInterceptor: BlockCertainProfileInterceptor
 ) : DelegatingWebMvcConfiguration() {
 
     override fun addInterceptors(registry: InterceptorRegistry) {
-        registry.addInterceptor(userLockInterceptor)
         registry.addInterceptor(blockCertainProfileInterceptor)
         super.addInterceptors(registry)
     }
