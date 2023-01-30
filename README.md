@@ -1,5 +1,5 @@
-# sumatrana-otter
-Webhook forwarder
+# smooth-coated-otter
+boilerplate
 
 # Requirements
 JDK 11

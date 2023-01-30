@@ -13,7 +13,7 @@ plugins {
     kotlin("kapt") version "1.7.21"
 }
 
-group = "io.mustelidae.otter.sumatrana"
+group = "io.mustelidae.smoothcoatedotter"
 version = "1.0-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
@@ -29,6 +29,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-undertow") {
         exclude("io.undertow", "undertow-websockets-jsr")
@@ -52,7 +54,10 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-ui:1.6.6")
     implementation("org.springdoc:springdoc-openapi-kotlin:1.6.5")
 
-    implementation("com.h2database:h2")
+    testImplementation("com.h2database:h2")
+    runtimeOnly("mysql:mysql-connector-java:8.0.28")
+    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.3.1")
+    testImplementation("com.asarkar.spring:embedded-redis-spring:1.1.1")
 
     implementation("org.apache.httpcomponents.client5:httpclient5:5.1.3")
 
@@ -65,7 +70,6 @@ configurations {
 }
 
 noArg {
-    annotation("io.mustelidae.otter.sumatrana.api.config.NoArg")
     invokeInitializers = true
 }
 
