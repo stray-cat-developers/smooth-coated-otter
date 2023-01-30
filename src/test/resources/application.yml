@@ -32,7 +32,6 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
-    platform: h2
     hikari:
       minimum-idle: 40
       maximum-pool-size: 60
@@ -53,6 +52,10 @@ spring:
             audit_strategy: org.hibernate.envers.strategy.DefaultAuditStrategy
     database-platform: org.hibernate.dialect.H2Dialect
     open-in-view: false
+  sql:
+    init:
+      platform: h2
+
 springdoc:
   show-actuator: false
   swagger-ui:
@@ -62,9 +65,46 @@ spring:
   config:
     activate:
       on-profile: embedded
-  data:
-    mongodb:
-      database: smooth-coated-otter
-      host: localhost
 
 app:
+  end-point:
+    slack:
+      host: https://localhost
+      logging: true
+      use-dummy: true
+    sentry:
+      host: https://localhost
+      logging: true
+      use-dummy: true
+  tunneling:
+    target:
+      sentry:
+        projects:
+          - key: SP1
+            projectId: 1
+            projectName: sample
+          - key: SP2
+            projectId: 2
+            projectName: dummy
+      slack:
+        senders:
+          - key: SS1
+            type: bot
+            value: dummy-token
+          - key: SS2
+            type: webhook
+            value: /services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
+    rule:
+      sentry-to-slack-mappings:
+        -
+          key: STSM1
+          slack-channel: proj-sample
+          style: default
+          sentry-key: SP1
+          slack-key: SS1
+        -
+          key: STSM2
+          slack-channel: proj-dummy
+          style: default
+          sentry-key: SP2
+          slack-key: SS2
