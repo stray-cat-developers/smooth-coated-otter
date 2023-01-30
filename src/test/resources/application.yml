@@ -71,38 +71,40 @@ app:
     slack:
       host: https://localhost
       logging: true
+      use-dummy: true
     sentry:
       host: https://localhost
       logging: true
+      use-dummy: true
   tunneling:
     target:
       sentry:
         projects:
-          - key: SentryA
+          - key: SP1
             projectId: 1
             projectName: sample
-          - key: SentryB
+          - key: SP2
             projectId: 2
             projectName: dummy
       slack:
         senders:
-          - key: SlackA
-            type: bot,
+          - key: SS1
+            type: bot
             value: dummy-token
-          - key: SlackB
-            type: webhook,
+          - key: SS2
+            type: webhook
             value: /services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
     rule:
       sentry-to-slack-mappings:
         -
-          key: TNGR
+          key: STSM1
           slack-channel: proj-sample
           style: default
-          sentry-key: SentryA
-          slack-key: SlackA
+          sentry-key: SP1
+          slack-key: SS1
         -
-          key: ARDGRD
+          key: STSM2
           slack-channel: proj-dummy
           style: default
-          sentry-key: SentryB
-          slack-key: SlackB
+          sentry-key: SP2
+          slack-key: SS2

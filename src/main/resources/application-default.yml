@@ -82,11 +82,11 @@ app:
         senders:
           -
             key: SlackA
-            type: bot,
+            type: bot
             value: dummy-token
           -
             key: SlackB
-            type: webhook,
+            type: webhook
             value: /services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
     rule:
       sentry-to-slack-mappings:

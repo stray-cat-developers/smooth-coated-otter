@@ -10,9 +10,10 @@ import io.mustelidae.otter.sumatrana.api.domain.slack.repository.SlackRepository
 import io.mustelidae.otter.sumatrana.api.domain.tunneling.SentryToSlackTunneling
 import io.mustelidae.otter.sumatrana.api.domain.tunneling.repository.SentryToSlackTunnelingRepository
 import org.springframework.boot.CommandLineRunner
+import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.annotation.Transactional
 
-
+@Configuration
 @Transactional
 class ApplicationInitializer(
     private val appEnvironment: AppEnvironment,
