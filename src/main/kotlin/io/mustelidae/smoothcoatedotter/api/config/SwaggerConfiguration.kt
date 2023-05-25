@@ -1,6 +1,5 @@
 package io.mustelidae.smoothcoatedotter.api.config
 
-import io.swagger.v3.core.converter.ModelConverters
 import org.springdoc.core.GroupedOpenApi
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

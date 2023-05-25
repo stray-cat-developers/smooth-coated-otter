@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Lazy
 import org.springframework.data.redis.connection.RedisClusterConfiguration
+import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 import org.springframework.data.redis.core.StringRedisTemplate
@@ -29,13 +30,22 @@ class DefaultEmbeddedRedis(
 
     @Bean(name = [Constant.Redis.USER_LOCK])
     fun userLockRedisTemplate(): StringRedisTemplate {
-        val configuration = RedisStandaloneConfiguration(properties.host, port)
-        val factory = LettuceConnectionFactory(configuration).apply {
-            afterPropertiesSet()
-        }
+        return mockTemplate()
+    }
+
+    private fun mockTemplate(): StringRedisTemplate {
+        val factory = redisConnectionFactory()
 
         return StringRedisTemplate().apply {
             setConnectionFactory(factory)
+        }
+    }
+
+    @Bean
+    fun redisConnectionFactory(): RedisConnectionFactory {
+        val configuration = RedisStandaloneConfiguration(properties.host, port)
+        return LettuceConnectionFactory(configuration).apply {
+            afterPropertiesSet()
         }
     }
 }
