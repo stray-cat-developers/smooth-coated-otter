@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.RedisClusterConfiguration
+import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.connection.RedisPassword
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 import org.springframework.data.redis.core.StringRedisTemplate
@@ -18,8 +19,16 @@ class RedisConfiguration(
     private val properties: RedisProperties
 ) {
     @Bean(name = [Constant.Redis.USER_LOCK])
-    fun userLockRedisTemplate(): StringRedisTemplate {
+    fun userLockRedisTemplate(
+        redisConnectionFactory: RedisConnectionFactory
+    ): StringRedisTemplate {
+        return StringRedisTemplate().apply {
+            setConnectionFactory(redisConnectionFactory)
+        }
+    }
 
+    @Bean
+    fun redisConnectionFactory(): RedisConnectionFactory {
         val configuration = RedisClusterConfiguration(
             properties.cluster.nodes
         ).apply {
@@ -29,9 +38,6 @@ class RedisConfiguration(
         val factory = LettuceConnectionFactory(configuration).apply {
             afterPropertiesSet()
         }
-
-        return StringRedisTemplate().apply {
-            setConnectionFactory(factory)
-        }
+        return factory
     }
 }
