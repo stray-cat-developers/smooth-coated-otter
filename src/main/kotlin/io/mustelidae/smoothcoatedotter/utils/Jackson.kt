@@ -33,7 +33,7 @@ object Jackson {
     fun getMapper(): ObjectMapper = mapper
 }
 
-private class CustomDateSerializer : StdSerializer<Date>(Date::class.java) {
+class CustomDateSerializer : StdSerializer<Date>(Date::class.java) {
     override fun serialize(value: Date?, gen: JsonGenerator?, provider: SerializerProvider?) {
         if (value != null && gen != null) {
             gen.writeString(

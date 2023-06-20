@@ -73,3 +73,8 @@ springdoc:
   swagger-ui:
     enabled: true
     tagsSorter: alpha
+
+app:
+  slack:
+    host: https://localhost
+    token: ''

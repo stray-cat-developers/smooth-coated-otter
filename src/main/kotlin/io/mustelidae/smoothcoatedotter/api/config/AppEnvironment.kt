@@ -4,6 +4,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(prefix = "app")
 class AppEnvironment {
+    val slack = Slack()
+    class Slack : ConnInfo() {
+        lateinit var token: String
+    }
 
     open class ConnInfo {
         var host: String = "localhost"

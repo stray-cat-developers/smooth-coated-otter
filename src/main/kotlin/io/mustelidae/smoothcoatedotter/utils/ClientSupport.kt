@@ -24,7 +24,7 @@ import java.nio.charset.Charset
 open class ClientSupport(
     private val objectMapper: ObjectMapper,
     private val writeLog: Boolean,
-    private val log: Logger
+    val log: Logger
 ) {
 
     private fun <T> T.toJson(): String = objectMapper.writeValueAsString(this)
