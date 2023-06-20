@@ -57,6 +57,11 @@ spring:
     cluster:
       nodes: 127.0.0.1:8000,127.0.0.1:8001,127.0.0.1:8002
       max-redirects: 1
+    lettuce:
+      cluster:
+        refresh:
+          period: 30s
+    timeout: 5s
 
   data:
     mongodb:
@@ -68,3 +73,8 @@ springdoc:
   swagger-ui:
     enabled: true
     tagsSorter: alpha
+
+app:
+  slack:
+    host: https://localhost
+    token: ''

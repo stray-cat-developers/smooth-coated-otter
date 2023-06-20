@@ -1,5 +1,7 @@
 package io.mustelidae.smoothcoatedotter.api.config.redis
 
+import io.lettuce.core.cluster.ClusterClientOptions
+import io.lettuce.core.cluster.ClusterTopologyRefreshOptions
 import io.mustelidae.smoothcoatedotter.api.common.Constant
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -8,6 +10,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.RedisClusterConfiguration
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.connection.RedisPassword
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories
@@ -29,15 +32,26 @@ class RedisConfiguration(
 
     @Bean
     fun redisConnectionFactory(): RedisConnectionFactory {
+        val clientConfiguration = LettuceClientConfiguration.builder()
+            .commandTimeout(properties.timeout)
+            .clientOptions(
+                ClusterClientOptions.builder()
+                    .topologyRefreshOptions(
+                        ClusterTopologyRefreshOptions.builder()
+                            .enablePeriodicRefresh(properties.lettuce.cluster.refresh.period)
+                            .enableAdaptiveRefreshTrigger()
+                            .build()
+                    ).build()
+            ).build()
+
         val configuration = RedisClusterConfiguration(
             properties.cluster.nodes
         ).apply {
-            password = RedisPassword.of(properties.password)
+            this.password = RedisPassword.of(properties.password)
         }
 
-        val factory = LettuceConnectionFactory(configuration).apply {
+        return LettuceConnectionFactory(configuration, clientConfiguration).apply {
             afterPropertiesSet()
         }
-        return factory
     }
 }
