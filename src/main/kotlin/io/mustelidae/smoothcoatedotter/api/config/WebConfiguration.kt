@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter
 @ControllerAdvice
 class WebConfiguration(
     private val userLockInterceptor: UserLockInterceptor,
-    private val blockCertainProfileInterceptor: BlockCertainProfileInterceptor
+    private val blockCertainProfileInterceptor: BlockCertainProfileInterceptor,
 ) : DelegatingWebMvcConfiguration() {
 
     override fun addInterceptors(registry: InterceptorRegistry) {

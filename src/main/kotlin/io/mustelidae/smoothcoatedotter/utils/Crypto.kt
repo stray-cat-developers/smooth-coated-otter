@@ -6,7 +6,7 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
 class Crypto(
-    key: String
+    key: String,
 ) {
 
     private val iv = IvParameterSpec("s42vYaZqtnkmTov8".toByteArray())

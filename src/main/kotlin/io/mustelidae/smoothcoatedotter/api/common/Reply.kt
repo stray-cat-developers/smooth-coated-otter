@@ -1,7 +1,7 @@
 package io.mustelidae.smoothcoatedotter.api.common
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped
-import javax.xml.bind.annotation.XmlAnyElement
+import jakarta.xml.bind.annotation.XmlAnyElement
 
 open class Reply<T>() {
     @get:JsonUnwrapped
@@ -17,7 +17,6 @@ open class Reply<T>() {
     }
 
     override fun equals(other: Any?): Boolean {
-
         if (this === other) {
             return true
         }
@@ -33,7 +32,6 @@ open class Reply<T>() {
     }
 
     override fun hashCode(): Int {
-
         var result = super.hashCode()
         result += if (content == null) 0 else 17 * content!!.hashCode()
         return result

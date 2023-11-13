@@ -1,21 +1,21 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.7.8"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("org.jmailen.kotlinter") version "3.6.0"
-    id("com.avast.gradle.docker-compose") version "0.14.9"
-    kotlin("jvm") version "1.7.21"
-    kotlin("plugin.spring") version "1.7.21"
-    kotlin("plugin.jpa") version "1.7.21"
-    kotlin("plugin.allopen") version "1.7.21"
-    kotlin("plugin.noarg") version "1.7.21"
-    kotlin("kapt") version "1.7.21"
+    id("org.springframework.boot") version "3.1.2"
+    id("io.spring.dependency-management") version "1.1.3"
+    id("org.jmailen.kotlinter") version "3.14.0"
+    id("com.avast.gradle.docker-compose") version "0.17.4"
+    kotlin("jvm") version "1.9.10"
+    kotlin("plugin.spring") version "1.9.10"
+    kotlin("plugin.jpa") version "1.9.10"
+    kotlin("plugin.allopen") version "1.9.10"
+    kotlin("plugin.noarg") version "1.9.10"
+    kotlin("kapt") version "1.9.10"
 }
 
 group = "io.mustelidae.smoothcoatedotter"
 version = "1.0-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenLocal()
@@ -25,9 +25,12 @@ repositories {
 ext["log4j2.version"] = "2.17.1"
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.21")
+    implementation(kotlin("stdlib"))
+    implementation(kotlin("reflect"))
+
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
@@ -46,17 +49,16 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
 
-    kapt("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties["querydsl.version"]}:jpa")
-    implementation("com.querydsl:querydsl-core")
-    implementation("com.querydsl:querydsl-jpa")
+    kapt("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties["querydsl.version"]}:jakarta")
+    implementation("com.querydsl:querydsl-jpa:${dependencyManagement.importedProperties["querydsl.version"]}:jakarta")
 
-    testImplementation("io.kotest:kotest-runner-junit5-jvm:5.1.0")
-    implementation("org.springdoc:springdoc-openapi-ui:1.6.6")
-    implementation("org.springdoc:springdoc-openapi-kotlin:1.6.5")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:5.6.2")
+
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
     testImplementation("com.h2database:h2")
-    runtimeOnly("mysql:mysql-connector-java:8.0.28")
-    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.3.1")
+    runtimeOnly("mysql:mysql-connector-java:8.0.33")
+    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.9.0")
     testImplementation("com.asarkar.spring:embedded-redis-spring:1.1.1")
 
     implementation("org.apache.httpcomponents.client5:httpclient5:5.1.3")
@@ -74,9 +76,9 @@ noArg {
 }
 
 allOpen {
-    annotation("javax.persistence.Entity")
-    annotation("javax.persistence.MappedSuperclass")
-    annotation("javax.persistence.Embeddable")
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
 }
 
 tasks.build {
@@ -86,7 +88,7 @@ tasks.build {
 tasks.withType<KotlinCompile>().all {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 

@@ -19,11 +19,11 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 @EnableConfigurationProperties(value = [RedisProperties::class])
 @EnableRedisRepositories
 class RedisConfiguration(
-    private val properties: RedisProperties
+    private val properties: RedisProperties,
 ) {
     @Bean(name = [Constant.Redis.USER_LOCK])
     fun userLockRedisTemplate(
-        redisConnectionFactory: RedisConnectionFactory
+        redisConnectionFactory: RedisConnectionFactory,
     ): StringRedisTemplate {
         return StringRedisTemplate().apply {
             setConnectionFactory(redisConnectionFactory)
@@ -40,12 +40,12 @@ class RedisConfiguration(
                         ClusterTopologyRefreshOptions.builder()
                             .enablePeriodicRefresh(properties.lettuce.cluster.refresh.period)
                             .enableAdaptiveRefreshTrigger()
-                            .build()
-                    ).build()
+                            .build(),
+                    ).build(),
             ).build()
 
         val configuration = RedisClusterConfiguration(
-            properties.cluster.nodes
+            properties.cluster.nodes,
         ).apply {
             this.password = RedisPassword.of(properties.password)
         }

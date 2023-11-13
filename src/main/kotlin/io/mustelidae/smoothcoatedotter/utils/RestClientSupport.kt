@@ -21,7 +21,7 @@ import org.slf4j.Logger
 import org.springframework.http.HttpStatus
 import java.nio.charset.Charset
 
-open class ClientSupport(
+open class RestClientSupport(
     private val objectMapper: ObjectMapper,
     private val writeLog: Boolean,
     val log: Logger

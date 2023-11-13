@@ -6,5 +6,5 @@ package io.mustelidae.smoothcoatedotter.api.scope
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class BlockCertainProfile(
-    val profiles: Array<String> = ["prod"]
+    val profiles: Array<String> = ["prod"],
 )

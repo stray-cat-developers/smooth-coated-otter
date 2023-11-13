@@ -11,7 +11,8 @@ class AppEnvironment {
 
     open class ConnInfo {
         var host: String = "localhost"
-        var timeout: Long = 2
+        var connTimeout: Int = 1000
+        var readTimeout: Long = 2000
         var logging: Boolean = false
         var useDummy: Boolean = false
         var perRoute: Int = 50

@@ -18,5 +18,5 @@ data class GlobalErrorFormat(
     @Schema(description = "reference error code")
     val refCode: String? = null,
     @Schema(description = "stack trace")
-    val trace: String? = null
+    val trace: String? = null,
 )

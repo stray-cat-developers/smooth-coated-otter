@@ -1,18 +1,18 @@
 package io.mustelidae.smoothcoatedotter.api.sender
 
 import io.mustelidae.smoothcoatedotter.api.config.AppEnvironment
-import io.mustelidae.smoothcoatedotter.utils.ClientSupport
+import io.mustelidae.smoothcoatedotter.utils.RestClientSupport
 import io.mustelidae.smoothcoatedotter.utils.toJson
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient
 import org.slf4j.LoggerFactory
 
 class StableSlackClient(
     private val env: AppEnvironment.Slack,
-    private val httpClient: CloseableHttpClient
-) : SlackClient, ClientSupport(
+    private val httpClient: CloseableHttpClient,
+) : SlackClient, RestClientSupport(
     SlackResources.getMapper(),
     env.logging,
-    LoggerFactory.getLogger(StableSlackClient::class.java)
+    LoggerFactory.getLogger(StableSlackClient::class.java),
 ) {
 
     override fun incomingWebhook(path: String, payload: SlackResources.Payload) {
@@ -28,7 +28,7 @@ class StableSlackClient(
 
         val header = listOf(
             "Content-Type" to "application/json",
-            "Authorization" to "Bearer $token"
+            "Authorization" to "Bearer $token",
         )
 
         log.info("send to slack via token [url=$url/payload=${payload.toJson()}]")
@@ -38,8 +38,8 @@ class StableSlackClient(
             header,
             PostMessage(
                 payload.blocks,
-                channel
-            )
+                channel,
+            ),
         ).orElseThrow()
     }
 

@@ -15,7 +15,7 @@ import org.springframework.data.redis.core.StringRedisTemplate
 @Lazy(false)
 @TestConfiguration
 class DefaultEmbeddedRedis(
-    private val properties: RedisProperties
+    private val properties: RedisProperties,
 ) {
 
     @Value("\${embedded-redis.port:-1}")
@@ -24,7 +24,7 @@ class DefaultEmbeddedRedis(
     @Bean
     fun redisClusterConfiguration(): RedisClusterConfiguration {
         return RedisClusterConfiguration(
-            listOf("${properties.host}:$port")
+            listOf("${properties.host}:$port"),
         )
     }
 

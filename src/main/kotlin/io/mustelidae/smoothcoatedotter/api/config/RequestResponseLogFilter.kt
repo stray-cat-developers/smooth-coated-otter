@@ -1,5 +1,11 @@
 package io.mustelidae.smoothcoatedotter.api.config
 
+import jakarta.servlet.FilterChain
+import jakarta.servlet.ReadListener
+import jakarta.servlet.ServletInputStream
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletRequestWrapper
+import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.server.ServletServerHttpRequest
@@ -12,12 +18,6 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStreamReader
 import java.nio.charset.Charset
-import javax.servlet.FilterChain
-import javax.servlet.ReadListener
-import javax.servlet.ServletInputStream
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletRequestWrapper
-import javax.servlet.http.HttpServletResponse
 
 class RequestResponseLogFilter : OncePerRequestFilter() {
 
@@ -30,7 +30,7 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         val isAsync = isAsyncDispatch(request)
         val startTime = System.currentTimeMillis()
@@ -65,7 +65,7 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
         request: HttpServletRequest,
         wrappedResponse: ContentCachingResponseWrapper,
         startTime: Long,
-        requestBody: String? = null
+        requestBody: String? = null,
     ) {
         val msg = loggingMessage(afterMessagePrefix, request)
 
@@ -73,8 +73,9 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
         msg.append(";latency=").append(System.currentTimeMillis() - startTime).append("ms")
 
         if (HttpStatus.valueOf(wrappedResponse.status).is2xxSuccessful) {
-            if (log.isDebugEnabled)
+            if (log.isDebugEnabled) {
                 appendMaskingRequestBody(requestBody, msg)
+            }
 
             log.info(msg.toString())
         } else {

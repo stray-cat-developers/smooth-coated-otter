@@ -3,7 +3,7 @@ package io.mustelidae.smoothcoatedotter.api.lock
 import io.mustelidae.smoothcoatedotter.api.config.redis.RedisKey
 
 class LockRedisKey(
-    private val userId: String
+    private val userId: String,
 ) : RedisKey {
 
     override fun getKey(): String {

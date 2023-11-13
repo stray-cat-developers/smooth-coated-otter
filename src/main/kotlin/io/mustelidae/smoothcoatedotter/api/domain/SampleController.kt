@@ -18,7 +18,7 @@ class SampleController {
     @EnableUserLock
     @GetMapping
     fun helloWorld(
-        @RequestHeader(RoleHeader.XUser.KEY) userId: Long
+        @RequestHeader(RoleHeader.XUser.KEY) userId: Long,
     ): Reply<String> {
         return "Hello World"
             .toReply()
