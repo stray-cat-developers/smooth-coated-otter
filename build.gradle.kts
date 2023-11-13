@@ -57,7 +57,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
     testImplementation("com.h2database:h2")
-    runtimeOnly("mysql:mysql-connector-java:8.0.33")
+    implementation("org.mariadb.jdbc:mariadb-java-client:3.3.0")
     testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.9.0")
     testImplementation("com.asarkar.spring:embedded-redis-spring:1.1.1")
 

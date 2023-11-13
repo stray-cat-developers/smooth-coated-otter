@@ -26,7 +26,7 @@ class RedisConfiguration(
         redisConnectionFactory: RedisConnectionFactory,
     ): StringRedisTemplate {
         return StringRedisTemplate().apply {
-            setConnectionFactory(redisConnectionFactory)
+            connectionFactory = redisConnectionFactory
         }
     }
 
@@ -37,8 +37,7 @@ class RedisConfiguration(
             .clientOptions(
                 ClusterClientOptions.builder()
                     .topologyRefreshOptions(
-                        ClusterTopologyRefreshOptions.builder()
-                            .enablePeriodicRefresh(properties.lettuce.cluster.refresh.period)
+                        ClusterTopologyRefreshOptions.builder().enablePeriodicRefresh(properties.lettuce.cluster.refresh.period)
                             .enableAdaptiveRefreshTrigger()
                             .build(),
                     ).build(),

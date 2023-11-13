@@ -37,7 +37,7 @@ class DefaultEmbeddedRedis(
         val factory = redisConnectionFactory()
 
         return StringRedisTemplate().apply {
-            setConnectionFactory(factory)
+            connectionFactory = factory
         }
     }
 
