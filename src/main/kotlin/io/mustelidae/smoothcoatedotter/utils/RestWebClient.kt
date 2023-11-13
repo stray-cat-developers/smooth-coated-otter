@@ -14,21 +14,20 @@ import java.time.Duration
 
 object RestWebClient {
 
-
     /**
      * WebClient Configuration
      * @ref https://docs.spring.io/spring-framework/reference/web/webflux-webclient/client-builder.html
      */
     fun new(connInfo: AppEnvironment.ConnInfo): WebClient {
-
         val exchangeStrategies = ExchangeStrategies.builder()
             .build().apply {
                 messageWriters().stream()
-                .filter(LoggingCodecSupport::class::isInstance)
-                .forEach {
-                        writer -> writer as LoggingCodecSupport
-                    writer.isEnableLoggingRequestDetails = connInfo.logging
-                }
+                    .filter(LoggingCodecSupport::class::isInstance)
+                    .forEach {
+                            writer ->
+                        writer as LoggingCodecSupport
+                        writer.isEnableLoggingRequestDetails = connInfo.logging
+                    }
             }
 
         return WebClient.builder()
@@ -41,9 +40,9 @@ object RestWebClient {
                         .doOnConnected {
                             // Processing time of Netty Handler.
                             it.addHandlerLast(ReadTimeoutHandler(connInfo.connTimeout + connInfo.readTimeout.toInt() + 500))
-                        // Processing time Http API
-                        }.responseTimeout(Duration.ofMillis(connInfo.readTimeout))
-                )
+                            // Processing time Http API
+                        }.responseTimeout(Duration.ofMillis(connInfo.readTimeout)),
+                ),
             ).build()
     }
 }

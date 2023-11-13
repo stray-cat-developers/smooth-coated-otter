@@ -23,7 +23,7 @@ object RestClient {
                 RequestConfig.custom()
                     .setConnectTimeout(connInfo.connTimeout.toLong(), TimeUnit.SECONDS)
                     .setResponseTimeout(connInfo.readTimeout * 2, TimeUnit.SECONDS)
-                    .build()
+                    .build(),
             )
             .build()
     }

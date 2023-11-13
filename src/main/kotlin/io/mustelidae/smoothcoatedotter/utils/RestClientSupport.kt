@@ -24,7 +24,7 @@ import java.nio.charset.Charset
 open class RestClientSupport(
     private val objectMapper: ObjectMapper,
     private val writeLog: Boolean,
-    val log: Logger
+    val log: Logger,
 ) {
 
     private fun <T> T.toJson(): String = objectMapper.writeValueAsString(this)
@@ -32,7 +32,7 @@ open class RestClientSupport(
     fun CloseableHttpClient.post(
         url: String,
         headers: List<Pair<String, Any>>,
-        body: Any? = null
+        body: Any? = null,
     ): CloseableHttpResponse {
         val post = HttpPost(url).apply {
             body?.let {
@@ -50,7 +50,7 @@ open class RestClientSupport(
     fun CloseableHttpClient.post(
         url: String,
         headers: List<Pair<String, Any>>,
-        params: List<Pair<String, String>>? = null
+        params: List<Pair<String, String>>? = null,
     ): CloseableHttpResponse {
         val post = HttpPost(url).apply {
             params?.map {
@@ -70,7 +70,7 @@ open class RestClientSupport(
     fun CloseableHttpClient.put(
         url: String,
         headers: List<Pair<String, Any>>,
-        body: Any? = null
+        body: Any? = null,
     ): CloseableHttpResponse {
         val put = HttpPut(url).apply {
             body?.let {
@@ -87,9 +87,8 @@ open class RestClientSupport(
     fun CloseableHttpClient.patch(
         url: String,
         headers: List<Pair<String, Any>>,
-        body: Any? = null
+        body: Any? = null,
     ): CloseableHttpResponse {
-
         val patch = HttpPatch(url).apply {
             body?.let {
                 entity = StringEntity(it.toJson())
@@ -106,7 +105,7 @@ open class RestClientSupport(
     fun CloseableHttpClient.delete(
         url: String,
         headers: List<Pair<String, Any>>,
-        params: List<Pair<String, Any?>>? = null
+        params: List<Pair<String, Any?>>? = null,
     ): CloseableHttpResponse {
         val queryString = params?.joinToString("&") { "${it.first}=${it.second}" }
         val uri = if (queryString.isNullOrBlank().not()) url + queryString?.let { "?$it" } else url
@@ -122,7 +121,7 @@ open class RestClientSupport(
     fun CloseableHttpClient.get(
         url: String,
         headers: List<Pair<String, Any>>,
-        params: List<Pair<String, Any?>>? = null
+        params: List<Pair<String, Any?>>? = null,
     ): CloseableHttpResponse {
         val queryString = params?.joinToString("&") { "${it.first}=${it.second}" }
         val uri = if (queryString.isNullOrBlank().not()) url + queryString?.let { "?$it" } else url
@@ -149,7 +148,7 @@ open class RestClientSupport(
                         refCode = globalErrorFormat.refCode
                         causeBy = mapOf(
                             "type" to globalErrorFormat.type,
-                            "description" to globalErrorFormat.description
+                            "description" to globalErrorFormat.description,
                         )
                     }
                 } catch (ex: Exception) {
@@ -195,6 +194,6 @@ open class RestClientSupport(
 
     open class ExternalServiceError(
         val code: String,
-        val message: String
+        val message: String,
     )
 }

@@ -1,8 +1,6 @@
 package io.mustelidae.smoothcoatedotter.utils
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.Logger
-import org.springframework.http.HttpStatus
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.util.UriComponentsBuilder
@@ -18,7 +16,7 @@ open class WebClientSupport(
     ): WebClient.ResponseSpec {
         return this.post()
             .uri(url)
-            .headers {httpHeaders ->
+            .headers { httpHeaders ->
                 headers.forEach { httpHeaders.set(it.key, it.value) }
             }
             .bodyValue(body)
@@ -31,7 +29,7 @@ open class WebClientSupport(
     ): WebClient.ResponseSpec {
         return this.post()
             .uri(url)
-            .headers {httpHeaders ->
+            .headers { httpHeaders ->
                 headers.forEach { httpHeaders.set(it.key, it.value) }
             }
             .retrieve()
@@ -44,11 +42,11 @@ open class WebClientSupport(
     ): WebClient.ResponseSpec {
         val uri = UriComponentsBuilder.fromPath(url)
             .apply {
-                if(params.isNullOrEmpty().not()) {
+                if (params.isNullOrEmpty().not()) {
                     this.queryParams(
                         LinkedMultiValueMap<String, String>().apply {
                             setAll(params!!.filterValues { it.isNullOrEmpty().not() })
-                        }
+                        },
                     )
                 }
             }.build()
@@ -56,7 +54,7 @@ open class WebClientSupport(
 
         return this.post()
             .uri(uri)
-            .headers {httpHeaders ->
+            .headers { httpHeaders ->
                 headers.forEach { httpHeaders.set(it.key, it.value) }
             }
             .retrieve()
@@ -69,7 +67,7 @@ open class WebClientSupport(
     ): WebClient.ResponseSpec {
         return this.put()
             .uri(url)
-            .headers {httpHeaders ->
+            .headers { httpHeaders ->
                 headers.forEach { httpHeaders.set(it.key, it.value) }
             }
             .bodyValue(body)
@@ -82,7 +80,7 @@ open class WebClientSupport(
     ): WebClient.ResponseSpec {
         return this.put()
             .uri(url)
-            .headers {httpHeaders ->
+            .headers { httpHeaders ->
                 headers.forEach { httpHeaders.set(it.key, it.value) }
             }
             .retrieve()
@@ -91,11 +89,11 @@ open class WebClientSupport(
     fun WebClient.patch(
         url: String,
         headers: Map<String, String>,
-        body: Any
+        body: Any,
     ): WebClient.ResponseSpec {
         return this.patch()
             .uri(url)
-            .headers {httpHeaders ->
+            .headers { httpHeaders ->
                 headers.forEach { httpHeaders.set(it.key, it.value) }
             }.bodyValue(body)
             .retrieve()
@@ -107,7 +105,7 @@ open class WebClientSupport(
     ): WebClient.ResponseSpec {
         return this.patch()
             .uri(url)
-            .headers {httpHeaders ->
+            .headers { httpHeaders ->
                 headers.forEach { httpHeaders.set(it.key, it.value) }
             }
             .retrieve()
@@ -120,11 +118,11 @@ open class WebClientSupport(
     ): WebClient.ResponseSpec {
         val uri = UriComponentsBuilder.fromPath(url)
             .apply {
-                if(params.isNullOrEmpty().not()) {
+                if (params.isNullOrEmpty().not()) {
                     this.queryParams(
                         LinkedMultiValueMap<String, String>().apply {
                             setAll(params!!.filterValues { it.isNullOrEmpty().not() })
-                        }
+                        },
                     )
                 }
             }.build()
@@ -132,7 +130,7 @@ open class WebClientSupport(
 
         return this.delete()
             .uri(uri)
-            .headers {httpHeaders ->
+            .headers { httpHeaders ->
                 headers.forEach { httpHeaders.set(it.key, it.value) }
             }
             .retrieve()
@@ -140,23 +138,26 @@ open class WebClientSupport(
 
     fun WebClient.get(
         url: String,
-        headers: List<Pair<String, Any>>,
-        params: List<Pair<String, Any?>>? = null
+        headers: Map<String, String>,
+        params: Map<String, String?>? = null,
     ): WebClient.ResponseSpec {
+        val uri = UriComponentsBuilder.fromPath(url)
+            .apply {
+                if (params.isNullOrEmpty().not()) {
+                    this.queryParams(
+                        LinkedMultiValueMap<String, String>().apply {
+                            setAll(params!!.filterValues { it.isNullOrEmpty().not() })
+                        },
+                    )
+                }
+            }.build()
+            .toUriString()
 
+        return this.get()
+            .uri(uri)
+            .headers { httpHeaders ->
+                headers.forEach { httpHeaders.set(it.key, it.value) }
+            }
+            .retrieve()
     }
-
-    fun WebClient.ResponseSpec.orElseThrow() {
-        this.onStatus(HttpStatus::)
-    }
-
-    fun WebClient.ResponseSpec.isOK(): Boolean {
-        this.onStatus()
-    }
-
-    fun writeLog() {
-
-    }
-
-
 }
