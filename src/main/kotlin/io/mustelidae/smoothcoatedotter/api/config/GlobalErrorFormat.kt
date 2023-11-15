@@ -1,6 +1,5 @@
 package io.mustelidae.smoothcoatedotter.api.config
 
-import io.mustelidae.smoothcoatedotter.api.common.ErrorCode
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(name = "Boilerplate.Error")

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.xml.bind.annotation.XmlAnyElement
 import jakarta.xml.bind.annotation.XmlElementWrapper
 import org.springframework.util.Assert
-import java.util.ArrayList
 import java.util.Collections
 
 open class Replies<T>
