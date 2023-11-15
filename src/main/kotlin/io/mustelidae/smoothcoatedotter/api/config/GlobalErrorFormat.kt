@@ -8,7 +8,7 @@ data class GlobalErrorFormat(
     @Schema(description = "error occurred time")
     val timestamp: String,
     @Schema(description = "error code")
-    val code: ErrorCode,
+    val code: String,
     @Schema(description = "text displayed to the user")
     val description: String? = null,
     @Schema(description = "exception message")

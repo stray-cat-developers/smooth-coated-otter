@@ -31,6 +31,8 @@ enum class ErrorCode(val summary: String) {
     C000("communication error"),
     CT01("connection timeout"),
     CT02("read timeout"),
+    CT03("response error"),
+
     ;
 
     override fun toString(): String {

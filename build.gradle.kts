@@ -62,7 +62,7 @@ dependencies {
     testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.9.0")
     testImplementation("com.asarkar.spring:embedded-redis-spring:1.1.1")
 
-    implementation("org.apache.httpcomponents.client5:httpclient5:5.2.1")
+    implementation("org.apache.httpcomponents.client5:httpclient5:5.1.4")
     implementation("org.yaml:snakeyaml:2.0")
 
 }

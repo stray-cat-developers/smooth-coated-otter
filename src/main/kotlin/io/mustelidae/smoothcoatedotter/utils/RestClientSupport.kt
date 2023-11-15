@@ -35,13 +35,8 @@ open class RestClientSupport(
         body: Any? = null,
     ): CloseableHttpResponse {
         val post = HttpPost(url).apply {
-            body?.let {
-                entity = StringEntity(it.toJson())
-            }
-
-            headers.forEach {
-                addHeader(it.first, it.second)
-            }
+            body?.let { entity = StringEntity(it.toJson()) }
+            headers.forEach { addHeader(it.first, it.second) }
         }
 
         return this.execute(post)
