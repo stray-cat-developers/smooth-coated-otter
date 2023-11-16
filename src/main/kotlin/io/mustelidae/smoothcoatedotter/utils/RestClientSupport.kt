@@ -135,7 +135,7 @@ open class RestClientSupport(
 
         if (this.isOK().not()) {
             val error = if (response.isNullOrEmpty()) {
-                Error(ErrorCode.C000, this.reasonPhrase)
+                Error(ErrorCode.CT03, this.reasonPhrase)
             } else {
                 try {
                     val globalErrorFormat = objectMapper.readValue<GlobalErrorFormat>(response)
@@ -147,7 +147,7 @@ open class RestClientSupport(
                         )
                     }
                 } catch (ex: Exception) {
-                    Error(ErrorCode.C000, response)
+                    Error(ErrorCode.CT03, response)
                 }
             }
 

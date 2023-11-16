@@ -1,11 +1,8 @@
 package io.mustelidae.smoothcoatedotter.api.common
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped
-import jakarta.xml.bind.annotation.XmlAnyElement
-
 open class Reply<T>() {
     @get:JsonUnwrapped
-    @get:XmlAnyElement
     var content: T? = null
 
     constructor(content: T) : this() {
