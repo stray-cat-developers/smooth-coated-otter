@@ -32,7 +32,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:3.1.5")
     implementation("org.springframework.boot:spring-boot-starter-webflux:3.1.5")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.1.5")
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb:4.1.2")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb:3.1.5")
     implementation("org.springframework.boot:spring-boot-starter-data-redis:3.1.5")
     implementation("org.springframework.boot:spring-boot-starter-validation:3.1.5")
     implementation("org.springframework.boot:spring-boot-starter-undertow:3.1.5") {
