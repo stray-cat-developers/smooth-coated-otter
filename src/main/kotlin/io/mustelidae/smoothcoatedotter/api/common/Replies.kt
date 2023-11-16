@@ -39,21 +39,6 @@ constructor(content: Iterable<T>) : Iterable<T> {
         return String.format("Resources { content: %s, %s }", getContent(), super.toString())
     }
 
-    override fun equals(other: Any?): Boolean {
-        if (other === this) {
-            return true
-        }
-
-        if (other == null || other.javaClass != javaClass) {
-            return false
-        }
-
-        val that = other as Replies<*>?
-
-        val contentEqual = if (this.content == null) that!!.content == null else this.content == that!!.content
-        return if (contentEqual) super.equals(other) else contentEqual
-    }
-
     override fun hashCode(): Int {
         var result = super.hashCode()
         result += if (content == null) 0 else 17 * content.hashCode()
