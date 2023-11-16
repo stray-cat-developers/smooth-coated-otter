@@ -7,16 +7,16 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class SlackClientConfiguration(
-    private val appEnvironment: AppEnvironment
+    private val appEnvironment: AppEnvironment,
 ) {
 
     @Bean
     fun slackClient(): SlackClient {
         val env = appEnvironment.slack
 
-        return if (env.useDummy)
+        return if (env.useDummy) {
             DummySlackClient()
-        else {
+        } else {
             StableSlackClient(env, RestClient.new(env))
         }
     }

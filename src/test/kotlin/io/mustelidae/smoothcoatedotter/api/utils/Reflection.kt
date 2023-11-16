@@ -25,8 +25,9 @@ fun invokeFunc(clazz: KClass<*>, functionName: String): KFunction<*>? {
 }
 
 fun invokeId(clazz: Any, id: Long, invoke: Boolean = true): Any {
-    if (invoke.not())
+    if (invoke.not()) {
         return clazz
+    }
 
     val props = clazz::class.memberProperties.find { it.name == "id" }
     props!!.isAccessible = true

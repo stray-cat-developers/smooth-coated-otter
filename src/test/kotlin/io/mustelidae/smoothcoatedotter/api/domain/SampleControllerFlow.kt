@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 
 internal class SampleControllerFlow(
-    private val mockMvc: MockMvc
+    private val mockMvc: MockMvc,
 ) {
     fun helloWorld(): String {
         val uri = linkTo<SampleController> { helloWorld(1234) }.toUri()

@@ -4,6 +4,8 @@ import io.mustelidae.smoothcoatedotter.api.common.Error
 import io.mustelidae.smoothcoatedotter.api.common.ErrorCode
 import io.mustelidae.smoothcoatedotter.api.config.PolicyException
 import io.mustelidae.smoothcoatedotter.api.permission.RoleHeader
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.stereotype.Component
@@ -11,13 +13,11 @@ import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
 import java.time.Duration
 import java.time.LocalDateTime
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 @Component
 class UserLockInterceptor
 @Autowired constructor(
-    private val stringRedisTemplate: StringRedisTemplate
+    private val stringRedisTemplate: StringRedisTemplate,
 ) : HandlerInterceptor {
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
@@ -39,7 +39,7 @@ class UserLockInterceptor
         request: HttpServletRequest,
         response: HttpServletResponse,
         handler: Any,
-        ex: Exception?
+        ex: Exception?,
     ) {
         if (handler is HandlerMethod && handler.hasMethodAnnotation(EnableUserLock::class.java)) {
             val userId = request.getHeader(RoleHeader.XUser.KEY) ?: return

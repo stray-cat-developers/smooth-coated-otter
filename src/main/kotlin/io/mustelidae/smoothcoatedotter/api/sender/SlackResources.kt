@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter
 class SlackResources {
 
     data class Payload(
-        val blocks: List<BlockKit.Block>
+        val blocks: List<BlockKit.Block>,
     )
 
     companion object {

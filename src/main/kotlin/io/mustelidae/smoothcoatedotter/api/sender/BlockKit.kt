@@ -1,5 +1,6 @@
 package io.mustelidae.smoothcoatedotter.api.sender
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 
@@ -13,7 +14,7 @@ class BlockKit {
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.EXISTING_PROPERTY,
         property = "type",
-        visible = true
+        visible = true,
     )
     @JsonSubTypes(
         JsonSubTypes.Type(value = Context::class, name = "context"),
@@ -48,13 +49,13 @@ class BlockKit {
     data class Context(
         /** Only images BlockElement and text CompositionObject are allowed.*/
         val elements: List<BlockKitObject>,
-        val blockId: String? = null
+        val blockId: String? = null,
     ) : BlockKitBlock {
         val type = "context"
     }
 
     data class Header(
-        val text: Text
+        val text: Text,
     ) : BlockKitBlock {
         val type: String = "header"
     }
@@ -63,7 +64,7 @@ class BlockKit {
         val text: Text? = null,
         val blockId: String? = null,
         val fields: List<Text>? = null,
-        val accessory: BlockKitElement? = null
+        val accessory: BlockKitElement? = null,
     ) : BlockKitBlock {
         val type = "section"
     }
@@ -79,13 +80,16 @@ class BlockKit {
         val value: String? = null,
         val style: Style? = null,
         val confirm: ConfirmationDialog? = null,
-        val accessibilityLabel: Text? = null
+        val accessibilityLabel: Text? = null,
     ) : BlockKitElement {
         val type = "button"
 
         enum class Style {
-            primary,
-            danger
+            @JsonProperty("primary")
+            PRIMARY,
+
+            @JsonProperty("danger")
+            DANGER,
         }
     }
 
@@ -94,14 +98,14 @@ class BlockKit {
         val options: List<Option>,
         val initialOptions: List<Option>? = null,
         val confirm: ConfirmationDialog? = null,
-        val focusOnLoad: Boolean? = null
+        val focusOnLoad: Boolean? = null,
     ) : BlockKitElement {
         val type = "checkboxes"
     }
 
     data class Image(
         val imageUrl: String,
-        val altText: String
+        val altText: String,
     ) : BlockKitElement, BlockKitObject {
         val type = "image"
     }
@@ -110,11 +114,14 @@ class BlockKit {
         val type: Type,
         val text: String,
         val emoji: Boolean? = null,
-        val verbatim: Boolean? = null
+        val verbatim: Boolean? = null,
     ) : BlockKitObject {
         enum class Type {
-            plain_text,
-            mrkdwn
+            @JsonProperty("plain_text")
+            PLAIN_TEXT,
+
+            @JsonProperty("mrkdwn")
+            MRKDWN,
         }
     }
 
@@ -123,21 +130,24 @@ class BlockKit {
         val text: Text,
         val confirm: Text,
         val deny: Text,
-        val style: Style? = null
+        val style: Style? = null,
     ) : BlockKitObject {
         enum class Style {
-            danger,
-            primary
+            @JsonProperty("primary")
+            PRIMARY,
+
+            @JsonProperty("danger")
+            DANGER,
         }
     }
 
     data class Option(
         val text: Text,
-        val value: String
+        val value: String,
     ) : BlockKitObject
 
     data class OptionGroup(
         val label: Text,
-        val options: List<Option>
+        val options: List<Option>,
     ) : BlockKitObject
 }

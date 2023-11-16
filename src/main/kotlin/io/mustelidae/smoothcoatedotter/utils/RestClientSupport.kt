@@ -21,10 +21,10 @@ import org.slf4j.Logger
 import org.springframework.http.HttpStatus
 import java.nio.charset.Charset
 
-open class ClientSupport(
+open class RestClientSupport(
     private val objectMapper: ObjectMapper,
     private val writeLog: Boolean,
-    val log: Logger
+    val log: Logger,
 ) {
 
     private fun <T> T.toJson(): String = objectMapper.writeValueAsString(this)
@@ -32,16 +32,11 @@ open class ClientSupport(
     fun CloseableHttpClient.post(
         url: String,
         headers: List<Pair<String, Any>>,
-        body: Any? = null
+        body: Any? = null,
     ): CloseableHttpResponse {
         val post = HttpPost(url).apply {
-            body?.let {
-                entity = StringEntity(it.toJson())
-            }
-
-            headers.forEach {
-                addHeader(it.first, it.second)
-            }
+            body?.let { entity = StringEntity(it.toJson()) }
+            headers.forEach { addHeader(it.first, it.second) }
         }
 
         return this.execute(post)
@@ -50,7 +45,7 @@ open class ClientSupport(
     fun CloseableHttpClient.post(
         url: String,
         headers: List<Pair<String, Any>>,
-        params: List<Pair<String, String>>? = null
+        params: List<Pair<String, String>>? = null,
     ): CloseableHttpResponse {
         val post = HttpPost(url).apply {
             params?.map {
@@ -70,7 +65,7 @@ open class ClientSupport(
     fun CloseableHttpClient.put(
         url: String,
         headers: List<Pair<String, Any>>,
-        body: Any? = null
+        body: Any? = null,
     ): CloseableHttpResponse {
         val put = HttpPut(url).apply {
             body?.let {
@@ -87,9 +82,8 @@ open class ClientSupport(
     fun CloseableHttpClient.patch(
         url: String,
         headers: List<Pair<String, Any>>,
-        body: Any? = null
+        body: Any? = null,
     ): CloseableHttpResponse {
-
         val patch = HttpPatch(url).apply {
             body?.let {
                 entity = StringEntity(it.toJson())
@@ -106,7 +100,7 @@ open class ClientSupport(
     fun CloseableHttpClient.delete(
         url: String,
         headers: List<Pair<String, Any>>,
-        params: List<Pair<String, Any?>>? = null
+        params: List<Pair<String, Any?>>? = null,
     ): CloseableHttpResponse {
         val queryString = params?.joinToString("&") { "${it.first}=${it.second}" }
         val uri = if (queryString.isNullOrBlank().not()) url + queryString?.let { "?$it" } else url
@@ -122,7 +116,7 @@ open class ClientSupport(
     fun CloseableHttpClient.get(
         url: String,
         headers: List<Pair<String, Any>>,
-        params: List<Pair<String, Any?>>? = null
+        params: List<Pair<String, Any?>>? = null,
     ): CloseableHttpResponse {
         val queryString = params?.joinToString("&") { "${it.first}=${it.second}" }
         val uri = if (queryString.isNullOrBlank().not()) url + queryString?.let { "?$it" } else url
@@ -141,7 +135,7 @@ open class ClientSupport(
 
         if (this.isOK().not()) {
             val error = if (response.isNullOrEmpty()) {
-                Error(ErrorCode.C000, this.reasonPhrase)
+                Error(ErrorCode.CT03, this.reasonPhrase)
             } else {
                 try {
                     val globalErrorFormat = objectMapper.readValue<GlobalErrorFormat>(response)
@@ -149,11 +143,11 @@ open class ClientSupport(
                         refCode = globalErrorFormat.refCode
                         causeBy = mapOf(
                             "type" to globalErrorFormat.type,
-                            "description" to globalErrorFormat.description
+                            "description" to globalErrorFormat.description,
                         )
                     }
                 } catch (ex: Exception) {
-                    Error(ErrorCode.C000, response)
+                    Error(ErrorCode.CT03, response)
                 }
             }
 
@@ -195,6 +189,6 @@ open class ClientSupport(
 
     open class ExternalServiceError(
         val code: String,
-        val message: String
+        val message: String,
     )
 }

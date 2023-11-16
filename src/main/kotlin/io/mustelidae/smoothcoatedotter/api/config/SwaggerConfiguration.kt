@@ -1,20 +1,45 @@
 package io.mustelidae.smoothcoatedotter.api.config
 
-import org.springdoc.core.GroupedOpenApi
+import org.springdoc.core.models.GroupedOpenApi
+import org.springdoc.core.utils.SpringDocUtils
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @Configuration
 class SwaggerConfiguration {
 
+    init {
+        SpringDocUtils.getConfig().replaceWithSchema(
+            LocalDateTime::class.java,
+            io.swagger.v3.oas.models.media.Schema<LocalDateTime>().apply {
+                example(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME))
+            },
+        )
+        SpringDocUtils.getConfig().replaceWithSchema(
+            LocalTime::class.java,
+            io.swagger.v3.oas.models.media.Schema<LocalTime>().apply {
+                example(LocalTime.now().format(DateTimeFormatter.ISO_TIME))
+            },
+        )
+        SpringDocUtils.getConfig().replaceWithSchema(
+            LocalDate::class.java,
+            io.swagger.v3.oas.models.media.Schema<LocalDate>().apply {
+                example(LocalDate.now().format(DateTimeFormatter.ISO_DATE))
+            },
+        )
+    }
+
     @Bean
     fun default(): GroupedOpenApi = GroupedOpenApi.builder()
         .group("API")
-        .addOpenApiCustomiser {
+        .addOpenApiCustomizer {
             it.info.version("v1")
         }
         .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
-        .pathsToMatch("/v1/**")
         .pathsToExclude(
             "/v1/maintenance/**",
             "/v1/migration/**",
@@ -22,14 +47,14 @@ class SwaggerConfiguration {
             "/v1/batch/**",
             "/v1/gateway/**",
             "/v1/open-api/**",
-            "/v1/internal-development/**"
+            "/v1/internal-development/**",
         )
         .build()
 
     @Bean
     fun maintenance(): GroupedOpenApi = GroupedOpenApi.builder()
         .group("Maintenance")
-        .addOpenApiCustomiser {
+        .addOpenApiCustomizer {
             it.info.version("v1")
         }
         .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
@@ -39,7 +64,7 @@ class SwaggerConfiguration {
     @Bean
     fun migration(): GroupedOpenApi = GroupedOpenApi.builder()
         .group("Migration")
-        .addOpenApiCustomiser {
+        .addOpenApiCustomizer {
             it.info.version("v1")
         }
         .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
@@ -49,7 +74,7 @@ class SwaggerConfiguration {
     @Bean
     fun bridge(): GroupedOpenApi = GroupedOpenApi.builder()
         .group("Bridge")
-        .addOpenApiCustomiser {
+        .addOpenApiCustomizer {
             it.info.version("v1")
         }
         .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
@@ -59,7 +84,7 @@ class SwaggerConfiguration {
     @Bean
     fun batch(): GroupedOpenApi = GroupedOpenApi.builder()
         .group("Batch")
-        .addOpenApiCustomiser {
+        .addOpenApiCustomizer {
             it.info.version("v1")
         }
         .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
@@ -69,7 +94,7 @@ class SwaggerConfiguration {
     @Bean
     fun gateway(): GroupedOpenApi = GroupedOpenApi.builder()
         .group("Gateway")
-        .addOpenApiCustomiser {
+        .addOpenApiCustomizer {
             it.info.version("v1")
         }
         .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
@@ -79,7 +104,7 @@ class SwaggerConfiguration {
     @Bean
     fun openApi(): GroupedOpenApi = GroupedOpenApi.builder()
         .group("Open-API")
-        .addOpenApiCustomiser {
+        .addOpenApiCustomizer {
             it.info.version("v1")
         }
         .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")
@@ -89,7 +114,7 @@ class SwaggerConfiguration {
     @Bean
     fun internalDevelopment(): GroupedOpenApi = GroupedOpenApi.builder()
         .group("Internal-Development")
-        .addOpenApiCustomiser {
+        .addOpenApiCustomizer {
             it.info.version("v1")
         }
         .packagesToScan("io.mustelidae.smoothcoatedotter.api.domain")

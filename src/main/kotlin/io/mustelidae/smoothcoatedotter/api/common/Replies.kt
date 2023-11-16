@@ -2,10 +2,7 @@ package io.mustelidae.smoothcoatedotter.api.common
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.util.Assert
-import java.util.ArrayList
 import java.util.Collections
-import javax.xml.bind.annotation.XmlAnyElement
-import javax.xml.bind.annotation.XmlElementWrapper
 
 open class Replies<T>
 constructor(content: Iterable<T>) : Iterable<T> {
@@ -25,8 +22,6 @@ constructor(content: Iterable<T>) : Iterable<T> {
         }
     }
 
-    @XmlAnyElement
-    @XmlElementWrapper
     @JsonProperty("content")
     open fun getContent(): Collection<T> {
         return Collections.unmodifiableCollection(content!!)
@@ -41,7 +36,6 @@ constructor(content: Iterable<T>) : Iterable<T> {
     }
 
     override fun equals(other: Any?): Boolean {
-
         if (other === this) {
             return true
         }
@@ -52,12 +46,15 @@ constructor(content: Iterable<T>) : Iterable<T> {
 
         val that = other as Replies<*>?
 
-        val contentEqual = if (this.content == null) that!!.content == null else this.content == that!!.content
+        val contentEqual = if (this.content == null) {
+            that!!.content == null
+        } else {
+            this.content == that!!.content
+        }
         return if (contentEqual) super.equals(other) else contentEqual
     }
 
     override fun hashCode(): Int {
-
         var result = super.hashCode()
         result += if (content == null) 0 else 17 * content.hashCode()
 

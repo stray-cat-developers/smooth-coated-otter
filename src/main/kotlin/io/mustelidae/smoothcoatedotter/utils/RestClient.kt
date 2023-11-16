@@ -21,9 +21,9 @@ object RestClient {
             .setConnectionManager(manager)
             .setDefaultRequestConfig(
                 RequestConfig.custom()
-                    .setConnectTimeout(connInfo.timeout, TimeUnit.SECONDS)
-                    .setResponseTimeout(connInfo.timeout * 2, TimeUnit.SECONDS)
-                    .build()
+                    .setConnectTimeout(connInfo.connTimeout.toLong(), TimeUnit.SECONDS)
+                    .setResponseTimeout(connInfo.readTimeout * 2, TimeUnit.SECONDS)
+                    .build(),
             )
             .build()
     }

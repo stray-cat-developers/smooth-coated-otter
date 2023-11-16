@@ -42,11 +42,11 @@ class ClientException(target: String, message: String, code: String? = null) : C
         message,
         causeBy = mapOf(
             "target" to target,
-            "clientErrorCode" to code
-        )
+            "clientErrorCode" to code,
+        ),
     ).apply {
         refCode = code
-    }
+    },
 )
 class ConnectionTimeoutException(target: String, timeoutConfig: Int, url: String) : CommunicationException(
     Error(
@@ -55,9 +55,9 @@ class ConnectionTimeoutException(target: String, timeoutConfig: Int, url: String
         causeBy = mapOf(
             "target" to target,
             "url" to url,
-            "timeout" to timeoutConfig
-        )
-    )
+            "timeout" to timeoutConfig,
+        ),
+    ),
 )
 
 class ReadTimeoutException(target: String, timeoutConfig: Int, url: String) : CommunicationException(
@@ -67,16 +67,17 @@ class ReadTimeoutException(target: String, timeoutConfig: Int, url: String) : Co
         causeBy = mapOf(
             "target" to target,
             "url" to url,
-            "timeout" to timeoutConfig
-        )
-    )
+            "timeout" to timeoutConfig,
+        ),
+    ),
 )
 
 open class AsyncException(message: String, causeBy: Map<String, Any?>? = null) : CustomException(
     Error(
         ErrorCode.SA00,
-        message, causeBy
-    )
+        message,
+        causeBy,
+    ),
 )
 
 /**
