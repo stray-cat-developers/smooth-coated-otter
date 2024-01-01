@@ -5,17 +5,17 @@ plugins {
     id("io.spring.dependency-management") version "1.1.3"
     id("org.jmailen.kotlinter") version "3.14.0"
     id("com.avast.gradle.docker-compose") version "0.17.4"
-    kotlin("jvm") version "1.9.10"
-    kotlin("plugin.spring") version "1.9.10"
-    kotlin("plugin.jpa") version "1.9.10"
-    kotlin("plugin.allopen") version "1.9.10"
-    kotlin("plugin.noarg") version "1.9.10"
-    kotlin("kapt") version "1.9.10"
+    kotlin("jvm") version "1.9.21"
+    kotlin("plugin.spring") version "1.9.21"
+    kotlin("plugin.jpa") version "1.9.21"
+    kotlin("plugin.allopen") version "1.9.21"
+    kotlin("plugin.noarg") version "1.9.21"
+    kotlin("kapt") version "1.9.21"
 }
 
 group = "io.mustelidae.smoothcoatedotter"
 version = "1.0-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_21
 
 repositories {
     mavenLocal()
@@ -25,8 +25,8 @@ repositories {
 ext["log4j2.version"] = "2.17.1"
 
 dependencies {
-    implementation(kotlin("stdlib:1.9.10"))
-    implementation(kotlin("reflect:1.9.10"))
+    implementation(kotlin("stdlib:1.9.21"))
+    implementation(kotlin("reflect:1.9.21"))
 
     implementation("org.springframework.boot:spring-boot-starter-actuator:3.1.5")
     implementation("org.springframework.boot:spring-boot-starter-web:3.1.5")
@@ -90,7 +90,7 @@ tasks.build {
 tasks.withType<KotlinCompile>().all {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
 }
 
