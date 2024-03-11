@@ -38,7 +38,7 @@ class RedisConfiguration(
                 ClusterClientOptions.builder()
                     .topologyRefreshOptions(
                         ClusterTopologyRefreshOptions.builder().enablePeriodicRefresh(properties.lettuce.cluster.refresh.period)
-                            .enableAdaptiveRefreshTrigger()
+                            .enableAdaptiveRefreshTrigger(ClusterTopologyRefreshOptions.RefreshTrigger.PERSISTENT_RECONNECTS) //// 특정 노드에 2번 이상 연결을 시도할 때
                             .build(),
                     ).build(),
             ).build()
