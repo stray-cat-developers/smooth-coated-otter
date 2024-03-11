@@ -1,5 +1,6 @@
 package io.mustelidae.smoothcoatedotter.api.config
 
+import io.mustelidae.smoothcoatedotter.utils.toJson
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ReadListener
 import jakarta.servlet.ServletInputStream
@@ -7,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletRequestWrapper
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
-import org.springframework.http.HttpStatus
 import org.springframework.http.server.ServletServerHttpRequest
 import org.springframework.util.StreamUtils
 import org.springframework.web.filter.OncePerRequestFilter
@@ -18,11 +18,9 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStreamReader
 import java.nio.charset.Charset
+import java.util.UUID
 
 class RequestResponseLogFilter : OncePerRequestFilter() {
-
-    private val beforeMessagePrefix = "[REQ]"
-    private val afterMessagePrefix = "[RES]"
     private val defaultCharset = Charset.forName("utf-8")
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -34,76 +32,100 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
     ) {
         val isAsync = isAsyncDispatch(request)
         val startTime = System.currentTimeMillis()
+        val transactionId = UUID.randomUUID().toString()
+        val messageMap = mutableMapOf<String, Any?>()
 
         if (isSkipUri(request) || isAsync) {
             filterChain.doFilter(request, response)
         } else {
             val multiReadRequest = request as? MultiReadHttpServletRequest ?: MultiReadHttpServletRequest(request)
-            val wrappedResponse =
-                response as? ContentCachingResponseWrapper ?: ContentCachingResponseWrapper(response)
+            val wrappedResponse = response as? ContentCachingResponseWrapper ?: ContentCachingResponseWrapper(response)
 
-            val requestBody = readBody(multiReadRequest)
             try {
-                beforeRequest(multiReadRequest)
+                run {
+                    appendTransactionId(messageMap, transactionId)
+                    appendHttpMethod(messageMap, request)
+                    appendUrl(messageMap, "req", request)
+                    appendReqHeader(messageMap, request)
+
+                    if (log.isDebugEnabled) {
+                        appendRequestBody(messageMap, multiReadRequest)
+                    }
+                }
+                log.info(messageMap.toJson())
+                messageMap.clear()
+
                 filterChain.doFilter(multiReadRequest, wrappedResponse)
             } finally {
-                afterRequest(multiReadRequest, wrappedResponse, startTime, requestBody)
+                run {
+                    appendTransactionId(messageMap, transactionId)
+                    appendHttpMethod(messageMap, request)
+                    appendUrl(messageMap, "res", request)
+                    appendStatus(messageMap, wrappedResponse)
+                    appendLatency(messageMap, startTime)
+
+                    if (log.isTraceEnabled) {
+                        appendResponseBody(messageMap, wrappedResponse)
+                    }
+
+                    log.info(messageMap.toJson())
+                    messageMap.clear()
+                }
+
                 wrappedResponse.copyBodyToResponse()
             }
         }
     }
 
-    private fun beforeRequest(request: HttpServletRequest) {
-        val msg = loggingMessage(beforeMessagePrefix, request)
-        request.getSession(false)?.let { msg.append(";session=").append(it.id) }
-        request.remoteUser?.let { msg.append(";user=").append(it) }
-        msg.append(";headers=").append(ServletServerHttpRequest(request).headers)
-        log.info(msg.toString())
-    }
-
-    private fun afterRequest(
-        request: HttpServletRequest,
-        wrappedResponse: ContentCachingResponseWrapper,
-        startTime: Long,
-        requestBody: String? = null,
-    ) {
-        val msg = loggingMessage(afterMessagePrefix, request)
-
-        msg.append(";status=").append(wrappedResponse.status)
-        msg.append(";latency=").append(System.currentTimeMillis() - startTime).append("ms")
-
-        if (HttpStatus.valueOf(wrappedResponse.status).is2xxSuccessful) {
-            if (log.isDebugEnabled) {
-                appendMaskingRequestBody(requestBody, msg)
-            }
-
-            log.info(msg.toString())
-        } else {
-            appendMaskingRequestBody(requestBody, msg)
-            wrappedResponse.contentAsByteArray.let { msg.append(";response-payload=").append(it.toString(defaultCharset)) }
-            log.error(msg.toString())
+    private fun appendUrl(messageMap: MutableMap<String, Any?>, prefix: String, request: HttpServletRequest) {
+        messageMap.apply {
+            this["transfer"] = prefix
+            this["uri"] = request.requestURI
+        }
+        request.queryString?.let {
+            messageMap["query"] = it
         }
     }
 
-    private fun appendMaskingRequestBody(requestBody: String?, msg: StringBuilder) {
-        requestBody?.let { msg.append(";request-payload=").append(PrivacyLogFilter.masking(it)) }
+    private fun appendReqHeader(messageMap: MutableMap<String, Any?>, request: HttpServletRequest) {
+        val headers = ServletServerHttpRequest(request).headers
+
+        messageMap["headers"] = headers
     }
 
-    private fun loggingMessage(prefix: String, request: HttpServletRequest): StringBuilder {
-        val msg = StringBuilder()
-        msg.append(prefix)
-        msg.append(";uri=").append(request.requestURI)
-
-        request.queryString?.let { msg.append('?').append(it) }
-        return msg
+    private fun appendHttpMethod(messageMap: MutableMap<String, Any?>, request: HttpServletRequest) {
+        messageMap.apply {
+            this["method"] = request.method
+            this["contentType"] = request.contentType
+            this["encoding"] = request.characterEncoding
+        }
     }
 
-    private fun readBody(request: HttpServletRequest): String? {
-        return try {
-            if (request.inputStream == null) null else StreamUtils.copyToString(request.inputStream, defaultCharset)
+    private fun appendTransactionId(messageMap: MutableMap<String, Any?>, transactionId: String) {
+        messageMap["txId"] = transactionId
+    }
+
+    private fun appendRequestBody(messageMap: MutableMap<String, Any?>, request: MultiReadHttpServletRequest) {
+        val requestBody = try {
+            StreamUtils.copyToString(request.inputStream, defaultCharset).trimIndent()
         } catch (e: IOException) {
-            "can't read. cause: ${e.message}"
+            """{ "error": "Failed to read request body.", "cause": "${e.message}" }""".trimIndent()
         }
+
+        messageMap["requestBody"] = PrivacyLogFilter.masking(requestBody)
+    }
+
+    private fun appendStatus(messageMap: MutableMap<String, Any?>, wrappedResponse: ContentCachingResponseWrapper) {
+        messageMap["status"] = wrappedResponse.status
+    }
+
+    private fun appendLatency(messageMap: MutableMap<String, Any?>, startTime: Long) {
+        messageMap["latency"] = "${System.currentTimeMillis() - startTime}ms"
+    }
+
+    private fun appendResponseBody(messageMap: MutableMap<String, Any?>, wrappedResponse: ContentCachingResponseWrapper) {
+        val responseBody = wrappedResponse.contentAsByteArray.toString(defaultCharset)
+        messageMap["responseBody"] = PrivacyLogFilter.masking(responseBody)
     }
 
     private fun isSkipUri(request: HttpServletRequest): Boolean {
@@ -113,11 +135,9 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
             uri.startsWith("/health") ||
                 uri.startsWith("/favicon.ico") ||
                 uri.startsWith("/h2-console") ||
-                uri.startsWith("/actuator/health") ||
-                uri.startsWith("/webjars/springfox-swagger-ui") ||
-                uri.startsWith("/swagger-ui/") ||
-                uri.startsWith("/swagger-ui.html") ||
-                uri.startsWith("/swagger-ui/index.html") ||
+                uri.startsWith("/actuator") ||
+                uri.startsWith("/webjars") ||
+                uri.startsWith("/swagger-ui") ||
                 uri.startsWith("/v3/api-docs") ||
                 uri.startsWith("/v2/api-docs")
             )
@@ -130,7 +150,10 @@ internal class MultiReadHttpServletRequest(request: HttpServletRequest) : HttpSe
     @Throws(IOException::class)
     override fun getInputStream(): ServletInputStream {
         if (cachedBytes == null) {
-            cacheInputStream()
+            val out = ByteArrayOutputStream()
+
+            StreamUtils.copy(super.getInputStream(), out)
+            cachedBytes = out.toByteArray()
         }
 
         return CachedServletInputStream()
@@ -139,14 +162,6 @@ internal class MultiReadHttpServletRequest(request: HttpServletRequest) : HttpSe
     @Throws(IOException::class)
     override fun getReader(): BufferedReader {
         return BufferedReader(InputStreamReader(inputStream))
-    }
-
-    @Throws(IOException::class)
-    private fun cacheInputStream() {
-        val out = ByteArrayOutputStream()
-
-        StreamUtils.copy(super.getInputStream(), out)
-        cachedBytes = out.toByteArray()
     }
 
     inner class CachedServletInputStream : ServletInputStream() {
@@ -169,22 +184,22 @@ internal class MultiReadHttpServletRequest(request: HttpServletRequest) : HttpSe
 private object PrivacyLogFilter {
     private val logger = LoggerFactory.getLogger(PrivacyLogFilter::class.java)
 
-    private const val stringValuePattern = "\"%s\"\\s*:\\s*\"([^\"]+)\",?"
-    private const val intValuePattern = "\"%s\"\\s*:\\s*([0-9]+)"
-    private val logPatterns = listOf(
-        stringValuePattern.format("latitude").toRegex(),
-        stringValuePattern.format("address").toRegex(),
-        stringValuePattern.format("phone").toRegex(),
-        stringValuePattern.format("plateNumber").toRegex(),
-        intValuePattern.format("userId").toRegex(),
-        intValuePattern.format("latitude").toRegex(),
-        intValuePattern.format("longitude").toRegex(),
+    private const val STRING_PATTERN = "\"%s\"\\s*:\\s*\"([^\"]+)\",?"
+    private const val NUMBER_PATTERN = "\"%s\"\\s*:\\s*([0-9]+)"
+    private val privacyTargetPatterns = listOf(
+        STRING_PATTERN.format("latitude").toRegex(),
+        STRING_PATTERN.format("address").toRegex(),
+        STRING_PATTERN.format("phone").toRegex(),
+        STRING_PATTERN.format("plateNumber").toRegex(),
+        NUMBER_PATTERN.format("userId").toRegex(),
+        NUMBER_PATTERN.format("latitude").toRegex(),
+        NUMBER_PATTERN.format("longitude").toRegex(),
     )
 
     fun masking(input: String): String {
         return try {
             var replace = input
-            for (pattern in logPatterns) {
+            for (pattern in privacyTargetPatterns) {
                 val matchResults = pattern.findAll(replace)
                 for (matchResult in matchResults) {
                     val range = matchResult.groups.last()!!.range
