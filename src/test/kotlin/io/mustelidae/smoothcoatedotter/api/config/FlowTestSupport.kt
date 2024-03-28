@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc
 @SpringBootTest(classes = [SmoothCoatedOtterApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = [DefaultEmbeddedMongo::class, DefaultEmbeddedRedis::class])
 @AutoConfigureMockMvc
-@AutoConfigureEmbeddedRedis(port = 0)
+@AutoConfigureEmbeddedRedis(port = 4210)
 class FlowTestSupport {
 
     @Autowired

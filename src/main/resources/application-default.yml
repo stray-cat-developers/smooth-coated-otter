@@ -23,7 +23,7 @@ server:
   compression:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain
-  port: 4210
+  port: 4200
 
 spring:
   jpa:
@@ -46,20 +46,20 @@ spring:
       minimum-idle: 3
       maximum-pool-size: 30
       pool-name: SpringBootHikariCP
-    driver-class-name: org.mariadb.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mariadb://127.0.0.1:3319/smooth-coated-otter?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://127.0.0.1:4202/local?serverTimezone=Asia/Seoul
     username: local
     password: local
 
   data:
     mongodb:
-      uri: mongodb://localhost:27018
+      uri: mongodb://localhost:4201
       database: smooth-coated-otter
     redis:
       timeout: 5s
       cluster:
-        nodes: 127.0.0.1:8000,127.0.0.1:8001,127.0.0.1:8002
+        nodes: 127.0.0.1:4211,127.0.0.1:4212,127.0.0.1:4213
         max-redirects: 1
       lettuce:
         cluster:

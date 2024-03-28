@@ -10,18 +10,18 @@ services:
       MYSQL_USER: local
       MYSQL_PASSWORD: local
     ports:
-      - "3319:3306"
+      - "4202:3306"
   redis-cluster:
     image: grokzen/redis-cluster:7.0.10
     platform: linux/amd64
     environment:
       IP: '127.0.0.1'
-      INITIAL_PORT: 8000
+      INITIAL_PORT: 4211
     ports:
-      - '8000-8005:8000-8005'
+      - '4211-4213:8001-8003'
   mongo:
     image: mongo:5.0.22
     platform: linux/arm64/v8
     container_name: mongodb
     ports:
-      - "27018:27017"
+      - "4201:27017"
