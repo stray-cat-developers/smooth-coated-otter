@@ -76,16 +76,6 @@ configurations {
     }
 }
 
-noArg {
-    invokeInitializers = true
-}
-
-allOpen {
-    annotation("jakarta.persistence.Entity")
-    annotation("jakarta.persistence.MappedSuperclass")
-    annotation("jakarta.persistence.Embeddable")
-}
-
 tasks.build {
     dependsOn("installKotlinterPrePushHook")
 }
