@@ -1,0 +1,41 @@
+name: Trigger URL on Merge with Jira Ticket
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  check-merge-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Get merged PR title
+      - name: Get Merged PR Title
+        id: get-pr-title
+        run: |
+          PR_NUMBER=$(git log -1 --pretty=%B | grep -oE '#[0-9]+' | tr -d '#')
+          if [[ -z "$PR_NUMBER" ]]; then
+            echo "No PR number found in commit message. Exiting."
+            exit 0
+          fi
+          PR_TITLE=$(gh pr view $PR_NUMBER --json title --jq '.title')
+          echo "PR_TITLE=$PR_TITLE" >> $GITHUB_ENV
+
+      # Step 2: Check if the PR title contains a Jira ticket
+      - name: Check PR Title for Jira Ticket
+        id: check-jira-ticket
+        run: |
+          if [[ "${{ env.PR_TITLE }}" =~ [A-Z]+-[0-9]+ ]]; then
+            echo "jira_ticket=${BASH_REMATCH[0]}" >> $GITHUB_ENV
+            echo "match=true" >> $GITHUB_ENV
+          else
+            echo "match=false" >> $GITHUB_ENV
+
+      # Step 3: Call Web URL if Jira Ticket Found
+      - name: Call Web URL
+        if: env.match == 'true'
+        run: |
+          curl -X POST https://automation.atlassian.com/pro/hooks/f95f6f43fe6286588dd022a0e8445e1ac6a33fad \
+            -H "Content-Type: application/json" \
+            -d '{"issues":["${{ env.jira_ticket }}"]}'
