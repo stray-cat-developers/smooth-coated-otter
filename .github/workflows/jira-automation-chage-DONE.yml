@@ -50,11 +50,10 @@ jobs:
       # JIRA webhook 호출
       - name: Call JIRA webhook
         if: steps.extract-tickets.outputs.found == 'true'
-        run: |
-          TICKETS=$(echo "${{ steps.extract-tickets.outputs.tickets }}" | jq -R 'split(",")')
+        run: |      
           curl -X POST https://automation.atlassian.com/pro/hooks/ac86ed5b3824981ac57ecb07299eb12d1a61994f \
-            -H "Content-Type: application/json" \
-            -d "{\"issues\": $TICKETS}"
+            -H "Content-Type: application/json" \            
+            -d  '{"issues": ${{ steps.extract-tickets.outputs.tickets }} }'         
       # 결과 로깅
       - name: Log sync results
         run: |
