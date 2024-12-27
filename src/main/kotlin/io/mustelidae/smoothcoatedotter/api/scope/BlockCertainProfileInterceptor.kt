@@ -12,8 +12,11 @@ import org.springframework.web.servlet.HandlerInterceptor
 class BlockCertainProfileInterceptor(
     val env: Environment,
 ) : HandlerInterceptor {
-
-    override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+    override fun preHandle(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        handler: Any,
+    ): Boolean {
         if ((handler is HandlerMethod).not()) {
             return true
         }
@@ -21,11 +24,12 @@ class BlockCertainProfileInterceptor(
         val handlerMethod = handler as HandlerMethod
         val hasClass = handlerMethod.method.declaringClass.isAnnotationPresent(BlockCertainProfile::class.java)
 
-        val blockCertainProfile = if (hasClass) {
-            handlerMethod.method.declaringClass.getDeclaredAnnotation(BlockCertainProfile::class.java)
-        } else {
-            handlerMethod.getMethodAnnotation(BlockCertainProfile::class.java)
-        }
+        val blockCertainProfile =
+            if (hasClass) {
+                handlerMethod.method.declaringClass.getDeclaredAnnotation(BlockCertainProfile::class.java)
+            } else {
+                handlerMethod.getMethodAnnotation(BlockCertainProfile::class.java)
+            }
 
         if (blockCertainProfile == null) {
             return true

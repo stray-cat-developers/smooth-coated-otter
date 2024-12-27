@@ -13,127 +13,126 @@ open class WebClientSupport(
         url: String,
         headers: Map<String, String>,
         body: Any,
-    ): WebClient.ResponseSpec {
-        return this.post()
+    ): WebClient.ResponseSpec =
+        this
+            .post()
             .uri(url)
             .headers { httpHeaders ->
                 headers.forEach { httpHeaders.set(it.key, it.value) }
-            }
-            .bodyValue(body)
+            }.bodyValue(body)
             .retrieve()
-    }
 
     fun WebClient.post(
         url: String,
         headers: Map<String, String>,
-    ): WebClient.ResponseSpec {
-        return this.post()
+    ): WebClient.ResponseSpec =
+        this
+            .post()
             .uri(url)
             .headers { httpHeaders ->
                 headers.forEach { httpHeaders.set(it.key, it.value) }
-            }
-            .retrieve()
-    }
+            }.retrieve()
 
     fun WebClient.post(
         url: String,
         headers: Map<String, String>,
         params: Map<String, String?>? = null,
     ): WebClient.ResponseSpec {
-        val uri = UriComponentsBuilder.fromPath(url)
-            .apply {
-                if (params.isNullOrEmpty().not()) {
-                    this.queryParams(
-                        LinkedMultiValueMap<String, String>().apply {
-                            setAll(params!!.filterValues { it.isNullOrEmpty().not() })
-                        },
-                    )
-                }
-            }.build()
-            .toUriString()
+        val uri =
+            UriComponentsBuilder
+                .fromPath(url)
+                .apply {
+                    if (params.isNullOrEmpty().not()) {
+                        this.queryParams(
+                            LinkedMultiValueMap<String, String>().apply {
+                                setAll(params!!.filterValues { it.isNullOrEmpty().not() })
+                            },
+                        )
+                    }
+                }.build()
+                .toUriString()
 
-        return this.post()
+        return this
+            .post()
             .uri(uri)
             .headers { httpHeaders ->
                 headers.forEach { httpHeaders.set(it.key, it.value) }
-            }
-            .retrieve()
+            }.retrieve()
     }
 
     fun WebClient.put(
         url: String,
         headers: Map<String, String>,
         body: Any,
-    ): WebClient.ResponseSpec {
-        return this.put()
-            .uri(url)
-            .headers { httpHeaders ->
-                headers.forEach { httpHeaders.set(it.key, it.value) }
-            }
-            .bodyValue(body)
-            .retrieve()
-    }
-
-    fun WebClient.put(
-        url: String,
-        headers: Map<String, String>,
-    ): WebClient.ResponseSpec {
-        return this.put()
-            .uri(url)
-            .headers { httpHeaders ->
-                headers.forEach { httpHeaders.set(it.key, it.value) }
-            }
-            .retrieve()
-    }
-
-    fun WebClient.patch(
-        url: String,
-        headers: Map<String, String>,
-        body: Any,
-    ): WebClient.ResponseSpec {
-        return this.patch()
+    ): WebClient.ResponseSpec =
+        this
+            .put()
             .uri(url)
             .headers { httpHeaders ->
                 headers.forEach { httpHeaders.set(it.key, it.value) }
             }.bodyValue(body)
             .retrieve()
-    }
+
+    fun WebClient.put(
+        url: String,
+        headers: Map<String, String>,
+    ): WebClient.ResponseSpec =
+        this
+            .put()
+            .uri(url)
+            .headers { httpHeaders ->
+                headers.forEach { httpHeaders.set(it.key, it.value) }
+            }.retrieve()
 
     fun WebClient.patch(
         url: String,
         headers: Map<String, String>,
-    ): WebClient.ResponseSpec {
-        return this.patch()
+        body: Any,
+    ): WebClient.ResponseSpec =
+        this
+            .patch()
             .uri(url)
             .headers { httpHeaders ->
                 headers.forEach { httpHeaders.set(it.key, it.value) }
-            }
+            }.bodyValue(body)
             .retrieve()
-    }
+
+    fun WebClient.patch(
+        url: String,
+        headers: Map<String, String>,
+    ): WebClient.ResponseSpec =
+        this
+            .patch()
+            .uri(url)
+            .headers { httpHeaders ->
+                headers.forEach { httpHeaders.set(it.key, it.value) }
+            }.retrieve()
 
     fun WebClient.delete(
         url: String,
         headers: Map<String, String>,
         params: Map<String, String?>? = null,
     ): WebClient.ResponseSpec {
-        val uri = UriComponentsBuilder.fromPath(url)
-            .apply {
-                if (params.isNullOrEmpty().not()) {
-                    this.queryParams(
-                        LinkedMultiValueMap<String, String>().apply {
-                            setAll(params!!.filterValues { it.isNullOrEmpty().not() })
-                        },
-                    )
-                }
-            }.build()
-            .toUriString()
+        val uri =
+            UriComponentsBuilder
+                .fromPath(url)
+                .apply {
+                    if (params.isNullOrEmpty().not()) {
+                        this.queryParams(
+                            LinkedMultiValueMap<String, String>().apply {
+                                setAll(params!!.filterValues { it.isNullOrEmpty().not() })
+                            },
+                        )
+                    }
+                }.build()
+                .toUriString()
 
-        return this.delete()
+        return this
+            .delete()
             .uri(uri)
             .headers { httpHeaders ->
                 headers.forEach { httpHeaders.set(it.key, it.value) }
-            }
-            .retrieve()
+            }.retrieve()
     }
 
     fun WebClient.get(
@@ -141,23 +140,25 @@ open class WebClientSupport(
         headers: Map<String, String>,
         params: Map<String, String?>? = null,
     ): WebClient.ResponseSpec {
-        val uri = UriComponentsBuilder.fromPath(url)
-            .apply {
-                if (params.isNullOrEmpty().not()) {
-                    this.queryParams(
-                        LinkedMultiValueMap<String, String>().apply {
-                            setAll(params!!.filterValues { it.isNullOrEmpty().not() })
-                        },
-                    )
-                }
-            }.build()
-            .toUriString()
+        val uri =
+            UriComponentsBuilder
+                .fromPath(url)
+                .apply {
+                    if (params.isNullOrEmpty().not()) {
+                        this.queryParams(
+                            LinkedMultiValueMap<String, String>().apply {
+                                setAll(params!!.filterValues { it.isNullOrEmpty().not() })
+                            },
+                        )
+                    }
+                }.build()
+                .toUriString()
 
-        return this.get()
+        return this
+            .get()
             .uri(uri)
             .headers { httpHeaders ->
                 headers.forEach { httpHeaders.set(it.key, it.value) }
-            }
-            .retrieve()
+            }.retrieve()
     }
 }

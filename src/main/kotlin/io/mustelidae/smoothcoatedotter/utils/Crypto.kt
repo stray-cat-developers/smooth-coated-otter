@@ -8,7 +8,6 @@ import javax.crypto.spec.SecretKeySpec
 class Crypto(
     key: String,
 ) {
-
     private val iv = IvParameterSpec("s42vYaZqtnkmTov8".toByteArray())
     private val algorithm = "AES/CBC/PKCS5Padding"
     private val keySpec = SecretKeySpec(key.toByteArray(), "AES")
@@ -23,7 +22,10 @@ class Crypto(
         return Base64.getUrlEncoder().withoutPadding().encodeToString(byteArrayOfEncrypt)
     }
 
-    fun <T> dec(text: String, valueType: Class<T>): T {
+    fun <T> dec(
+        text: String,
+        valueType: Class<T>,
+    ): T {
         val cipher = Cipher.getInstance(algorithm)
         cipher.init(Cipher.DECRYPT_MODE, keySpec, iv)
         val cipherText = Base64.getUrlDecoder().decode(text)

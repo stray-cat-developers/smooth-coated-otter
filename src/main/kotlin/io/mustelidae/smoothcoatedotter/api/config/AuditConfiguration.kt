@@ -12,16 +12,13 @@ import java.util.Optional
 @Configuration
 @EnableJpaAuditing
 class AuditConfiguration {
-
     @Bean
-    internal fun auditorAware(): AuditorAware<*> {
-        return AuditorAwareImpl()
-    }
+    internal fun auditorAware(): AuditorAware<*> = AuditorAwareImpl()
 }
 
 class AuditorAwareImpl : AuditorAware<String> {
     override fun getCurrentAuditor(): Optional<String> {
-        var auditor = unknownAuditor
+        var auditor = UNKNOWN_AUDITOR
 
         if (RequestContextHolder.getRequestAttributes() != null) {
             val request = (RequestContextHolder.getRequestAttributes() as ServletRequestAttributes).request
@@ -30,12 +27,12 @@ class AuditorAwareImpl : AuditorAware<String> {
             val partnerId = request.getHeader(RoleHeader.XPartner.KEY)
             val userId = request.getHeader(RoleHeader.XUser.KEY)
 
-            auditor = adminId?.let { "A:".plus(it) } ?: partnerId?.let { "P:".plus(it) } ?: userId?.let { "U:".plus(it) } ?: unknownAuditor
+            auditor = adminId?.let { "A:".plus(it) } ?: partnerId?.let { "P:".plus(it) } ?: userId?.let { "U:".plus(it) } ?: UNKNOWN_AUDITOR
         }
         return Optional.of(auditor)
     }
 
     companion object {
-        const val unknownAuditor = "S:unknown"
+        const val UNKNOWN_AUDITOR = "S:unknown"
     }
 }
