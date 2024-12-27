@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration
 class SlackClientConfiguration(
     private val appEnvironment: AppEnvironment,
 ) {
-
     @Bean
     fun slackClient(): SlackClient {
         val env = appEnvironment.slack

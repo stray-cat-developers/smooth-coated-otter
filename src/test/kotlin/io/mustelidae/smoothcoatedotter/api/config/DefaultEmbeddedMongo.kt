@@ -32,7 +32,7 @@ class DefaultEmbeddedMongo(
 
     @PostConstruct
     fun startup() {
-        mongoProcess = Mongod.instance().start(Version.Main.V5_0)
+        mongoProcess = Mongod.instance().start(Version.Main.V7_0)
         host = mongoProcess.current().serverAddress.host
         port = mongoProcess.current().serverAddress.port
     }
@@ -59,7 +59,5 @@ class DefaultEmbeddedMongo(
 )
 class CustomEmbeddedRedisAutoConfiguration {
     @Bean
-    fun embeddedRedisLifecycle(): EmbeddedRedisLifecycle {
-        return EmbeddedRedisLifecycle()
-    }
+    fun embeddedRedisLifecycle(): EmbeddedRedisLifecycle = EmbeddedRedisLifecycle()
 }

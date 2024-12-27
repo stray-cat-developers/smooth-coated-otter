@@ -1,5 +1,6 @@
 package io.mustelidae.smoothcoatedotter.api.config
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.mustelidae.smoothcoatedotter.api.lock.UserLockInterceptor
 import io.mustelidae.smoothcoatedotter.api.scope.BlockCertainProfileInterceptor
 import io.mustelidae.smoothcoatedotter.utils.Jackson
@@ -8,8 +9,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar
 import org.springframework.format.support.FormattingConversionService
-import org.springframework.http.converter.HttpMessageConverter
-import org.springframework.http.converter.StringHttpMessageConverter
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration
@@ -22,26 +21,17 @@ class WebConfiguration(
     private val userLockInterceptor: UserLockInterceptor,
     private val blockCertainProfileInterceptor: BlockCertainProfileInterceptor,
 ) : DelegatingWebMvcConfiguration() {
-
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(userLockInterceptor)
         registry.addInterceptor(blockCertainProfileInterceptor)
         super.addInterceptors(registry)
     }
 
-    override fun configureMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
-        val objectMapper = Jackson.getMapper()
-        converters.add(StringHttpMessageConverter())
-        converters.add(MappingJackson2HttpMessageConverter(objectMapper))
-        super.configureMessageConverters(converters)
-    }
-
     @Bean
-    fun requestResponseLogFilter(): FilterRegistrationBean<RequestResponseLogFilter> {
-        return FilterRegistrationBean<RequestResponseLogFilter>().apply {
+    fun requestResponseLogFilter(): FilterRegistrationBean<RequestResponseLogFilter> =
+        FilterRegistrationBean<RequestResponseLogFilter>().apply {
             filter = RequestResponseLogFilter()
         }
-    }
 
     @Bean
     override fun mvcConversionService(): FormattingConversionService {
@@ -53,4 +43,8 @@ class WebConfiguration(
         dateTimeRegistrar.registerFormatters(conversionService)
         return conversionService
     }
+
+    @Bean
+    fun mappingJackson2HttpMessageConverter(objectMapper: ObjectMapper?): MappingJackson2HttpMessageConverter =
+        MappingJackson2HttpMessageConverter(Jackson.getMapper())
 }

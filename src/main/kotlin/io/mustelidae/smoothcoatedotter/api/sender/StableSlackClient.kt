@@ -9,13 +9,16 @@ import org.slf4j.LoggerFactory
 class StableSlackClient(
     private val env: AppEnvironment.Slack,
     private val httpClient: CloseableHttpClient,
-) : SlackClient, RestClientSupport(
-    SlackResources.getMapper(),
-    env.logging,
-    LoggerFactory.getLogger(StableSlackClient::class.java),
-) {
-
-    override fun incomingWebhook(path: String, payload: SlackResources.Payload) {
+) : RestClientSupport(
+        SlackResources.getMapper(),
+        env.logging,
+        LoggerFactory.getLogger(StableSlackClient::class.java),
+    ),
+    SlackClient {
+    override fun incomingWebhook(
+        path: String,
+        payload: SlackResources.Payload,
+    ) {
         val header = listOf("Content-Type" to "application/json", "charset" to "utf-8")
 
         val url = "${env.host}$path"
@@ -23,24 +26,30 @@ class StableSlackClient(
         httpClient.post(url, header, payload).orElseThrow()
     }
 
-    override fun chatBot(token: String, channel: String, payload: SlackResources.Payload) {
+    override fun chatBot(
+        token: String,
+        channel: String,
+        payload: SlackResources.Payload,
+    ) {
         val url = "${env.host}/api/chat.postMessage"
 
-        val header = listOf(
-            "Content-Type" to "application/json",
-            "Authorization" to "Bearer $token",
-        )
+        val header =
+            listOf(
+                "Content-Type" to "application/json",
+                "Authorization" to "Bearer $token",
+            )
 
         log.info("send to slack via token [url=$url/payload=${payload.toJson()}]")
 
-        httpClient.post(
-            url,
-            header,
-            PostMessage(
-                payload.blocks,
-                channel,
-            ),
-        ).orElseThrow()
+        httpClient
+            .post(
+                url,
+                header,
+                PostMessage(
+                    payload.blocks,
+                    channel,
+                ),
+            ).orElseThrow()
     }
 
     private data class PostMessage(

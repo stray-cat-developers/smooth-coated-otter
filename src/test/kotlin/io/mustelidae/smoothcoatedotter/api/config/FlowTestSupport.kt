@@ -21,7 +21,6 @@ import org.springframework.test.web.servlet.MockMvc
 @AutoConfigureMockMvc
 @AutoConfigureEmbeddedRedis(port = 4210)
 class FlowTestSupport {
-
     @Autowired
     final lateinit var mockMvc: MockMvc
 }

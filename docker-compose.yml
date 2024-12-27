@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   mysql:
-    image: mysql:8.3
+    image: mysql:8.4.3
     platform: linux/arm64/v8
     command: "mysqld --character-set-server=utf8mb4"
     environment:
@@ -12,7 +12,7 @@ services:
     ports:
       - "4202:3306"
   redis-cluster:
-    image: grokzen/redis-cluster:7.0.10
+    image: grokzen/redis-cluster:7.2.5
     platform: linux/amd64
     environment:
       IP: '127.0.0.1'
@@ -20,8 +20,7 @@ services:
     ports:
       - '4211-4213:8001-8003'
   mongo:
-    image: mongo:5.0.22
+    image: mongo:7.0.16
     platform: linux/arm64/v8
-    container_name: mongodb
     ports:
       - "4201:27017"
