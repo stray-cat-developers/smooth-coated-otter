@@ -25,10 +25,14 @@ jobs:
           SINCE_DATE=$(date -d "7 days ago" +%Y-%m-%d)
           
           # 최근 7일간 머지된 커밋들에서 브랜치 이름 추출 및 JIRA 티켓 번호 찾기
-          TICKETS=$(git log --since="$SINCE_DATE" --merges --format="%s" | \
-                   grep -oE 'KAN-[0-9]+' | \
-                   sort -u | \
-                   jq -R -s -c 'split("\n")[:-1]')
+          TICKETS=$(gh pr list \
+            --state merged \
+            --base master \
+            --json headRefName,mergedAt \
+            --jq ".[] | select(.mergedAt >= \"$SINCE_DATE\") | .headRefName" | \
+            grep -oE 'KAN-[0-9]+' | \
+            sort -u | \
+            jq -R -s 'split("\n") | map(select(length > 0))')
           
           # 발견된 티켓 수 확인
           TICKET_COUNT=$(echo $TICKETS | jq '. | length')
