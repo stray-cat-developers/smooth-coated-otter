@@ -9,13 +9,15 @@ on:
 jobs:
   sync-jira-tickets:
     runs-on: ubuntu-latest
-
     steps:
-      # 전체 히스토리를 포함하여 코드 체크아웃
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # 전체 히스토리 가져오기
+      # GitHub CLI 인증 설정
+      - name: Configure GitHub CLI
+        run: |
+          # GH_TOKEN 환경변수를 사용하여 GitHub CLI 인증
+          echo "${{ secrets.GH_PAT }}" | gh auth login --with-token
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+    
 
       # 최근 7일간 머지된 브랜치에서 JIRA 티켓 추출
       - name: Extract JIRA tickets from merged branches
