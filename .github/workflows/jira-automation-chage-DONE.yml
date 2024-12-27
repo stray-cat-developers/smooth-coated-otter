@@ -10,7 +10,7 @@ jobs:
   sync-jira-tickets:
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      GH_TOKEN: ${{ secrets.GH_PAT }}
     steps:    
       # 최근 7일간 머지된 브랜치에서 JIRA 티켓 추출
       - name: Extract JIRA tickets from merged branches
