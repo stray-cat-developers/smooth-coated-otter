@@ -40,7 +40,7 @@ jobs:
           
           if [ "$TICKET_COUNT" -gt 0 ]; then
             echo "Found $TICKET_COUNT JIRA tickets"
-            echo "tickets=$TICKETS" >> $GITHUB_OUTPUT
+            echo "tickets=$(echo $TICKETS | jq -c -R '.')" >> $GITHUB_OUTPUT
             echo "found=true" >> $GITHUB_OUTPUT
           else
             echo "No JIRA tickets found in merged branches"
