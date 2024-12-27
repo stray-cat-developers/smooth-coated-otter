@@ -1,4 +1,4 @@
-name: JIRA Webhook on PR Merge
+name: PR Merge 후 JIRA 티켓 변경(IN QA)
 
 on:
   pull_request:
