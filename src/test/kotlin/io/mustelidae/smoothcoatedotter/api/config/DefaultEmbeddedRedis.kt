@@ -17,21 +17,17 @@ import org.springframework.data.redis.core.StringRedisTemplate
 class DefaultEmbeddedRedis(
     private val properties: RedisProperties,
 ) {
-
     @Value("\${embedded-redis.port:-1}")
     var port: Int = 0
 
     @Bean
-    fun redisClusterConfiguration(): RedisClusterConfiguration {
-        return RedisClusterConfiguration(
+    fun redisClusterConfiguration(): RedisClusterConfiguration =
+        RedisClusterConfiguration(
             listOf("${properties.host}:$port"),
         )
-    }
 
     @Bean(name = [Constant.Redis.USER_LOCK])
-    fun userLockRedisTemplate(): StringRedisTemplate {
-        return mockTemplate()
-    }
+    fun userLockRedisTemplate(): StringRedisTemplate = mockTemplate()
 
     private fun mockTemplate(): StringRedisTemplate {
         val factory = redisConnectionFactory()

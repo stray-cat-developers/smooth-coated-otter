@@ -12,9 +12,7 @@ open class Reply<T>() {
         this.content = content
     }
 
-    override fun toString(): String {
-        return String.format("Resource { content: %s, %s }", content, super.toString())
-    }
+    override fun toString(): String = String.format("Resource { content: %s, %s }", content, super.toString())
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

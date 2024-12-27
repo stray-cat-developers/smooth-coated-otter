@@ -7,7 +7,11 @@ import kotlin.reflect.full.declaredMemberFunctions
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
-fun invokeAny(clazz: Any, arg: String, data: Any): Any {
+fun invokeAny(
+    clazz: Any,
+    arg: String,
+    data: Any,
+): Any {
     val props = clazz::class.memberProperties.find { it.name == arg }
     props!!.isAccessible = true
     if (props is KMutableProperty<*>) {
@@ -16,7 +20,10 @@ fun invokeAny(clazz: Any, arg: String, data: Any): Any {
     return clazz
 }
 
-fun invokeFunc(clazz: KClass<*>, functionName: String): KFunction<*>? {
+fun invokeFunc(
+    clazz: KClass<*>,
+    functionName: String,
+): KFunction<*>? {
     val func = clazz.declaredMemberFunctions.find { it.name == functionName }
     func?.let {
         it.isAccessible = true
@@ -24,7 +31,11 @@ fun invokeFunc(clazz: KClass<*>, functionName: String): KFunction<*>? {
     return func
 }
 
-fun invokeId(clazz: Any, id: Long, invoke: Boolean = true): Any {
+fun invokeId(
+    clazz: Any,
+    id: Long,
+    invoke: Boolean = true,
+): Any {
     if (invoke.not()) {
         return clazz
     }

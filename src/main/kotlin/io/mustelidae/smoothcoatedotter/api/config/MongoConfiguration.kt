@@ -7,15 +7,10 @@ import org.springframework.data.mongodb.config.MongoConfigurationSupport
 
 @Configuration
 class MongoConfiguration : MongoConfigurationSupport() {
-
     @Autowired
     lateinit var mongoProperties: MongoProperties
 
-    override fun getDatabaseName(): String {
-        return mongoProperties.mongoClientDatabase
-    }
+    override fun getDatabaseName(): String = mongoProperties.mongoClientDatabase
 
-    override fun getInitialEntitySet(): MutableSet<Class<*>> {
-        return super.getInitialEntitySet()
-    }
+    override fun getInitialEntitySet(): MutableSet<Class<*>> = super.getInitialEntitySet()
 }

@@ -3,8 +3,9 @@ package io.mustelidae.smoothcoatedotter.api.common
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(name = "Boilerplate.ErrorCode", enumAsRef = true)
-enum class ErrorCode(val summary: String) {
-
+enum class ErrorCode(
+    val summary: String,
+) {
     H000("Human error"),
 
     HD00("Data not found"),
@@ -35,7 +36,5 @@ enum class ErrorCode(val summary: String) {
 
     ;
 
-    override fun toString(): String {
-        return "${this.name}::${this.summary}"
-    }
+    override fun toString(): String = "${this.name}::${this.summary}"
 }

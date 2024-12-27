@@ -2,7 +2,7 @@
 boilerplate
 
 # Requirements
-JDK 11
+JDK 21
 
 # How to Run
 ```

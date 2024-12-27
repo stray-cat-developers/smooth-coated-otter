@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
  * @ref https://app.slack.com/block-kit-builder
  */
 class BlockKit {
-
     @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.EXISTING_PROPERTY,
@@ -106,7 +105,8 @@ class BlockKit {
     data class Image(
         val imageUrl: String,
         val altText: String,
-    ) : BlockKitElement, BlockKitObject {
+    ) : BlockKitElement,
+        BlockKitObject {
         val type = "image"
     }
 

@@ -1,7 +1,6 @@
 package io.mustelidae.smoothcoatedotter.api.permission
 
 object RoleHeader {
-
     sealed interface Role
 
     object XAdmin : Role {

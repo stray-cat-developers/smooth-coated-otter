@@ -22,32 +22,35 @@ class RedisConfiguration(
     private val properties: RedisProperties,
 ) {
     @Bean(name = [Constant.Redis.USER_LOCK])
-    fun userLockRedisTemplate(
-        redisConnectionFactory: RedisConnectionFactory,
-    ): StringRedisTemplate {
-        return StringRedisTemplate().apply {
+    fun userLockRedisTemplate(redisConnectionFactory: RedisConnectionFactory): StringRedisTemplate =
+        StringRedisTemplate().apply {
             connectionFactory = redisConnectionFactory
         }
-    }
 
     @Bean
     fun redisConnectionFactory(): RedisConnectionFactory {
-        val clientConfiguration = LettuceClientConfiguration.builder()
-            .commandTimeout(properties.timeout)
-            .clientOptions(
-                ClusterClientOptions.builder()
-                    .topologyRefreshOptions(
-                        ClusterTopologyRefreshOptions.builder().enablePeriodicRefresh(properties.lettuce.cluster.refresh.period)
-                            .enableAllAdaptiveRefreshTriggers()
-                            .build(),
-                    ).build(),
-            ).build()
+        val clientConfiguration =
+            LettuceClientConfiguration
+                .builder()
+                .commandTimeout(properties.timeout)
+                .clientOptions(
+                    ClusterClientOptions
+                        .builder()
+                        .topologyRefreshOptions(
+                            ClusterTopologyRefreshOptions
+                                .builder()
+                                .enablePeriodicRefresh(properties.lettuce.cluster.refresh.period)
+                                .enableAllAdaptiveRefreshTriggers()
+                                .build(),
+                        ).build(),
+                ).build()
 
-        val configuration = RedisClusterConfiguration(
-            properties.cluster.nodes,
-        ).apply {
-            this.password = RedisPassword.of(properties.password)
-        }
+        val configuration =
+            RedisClusterConfiguration(
+                properties.cluster.nodes,
+            ).apply {
+                this.password = RedisPassword.of(properties.password)
+            }
 
         return LettuceConnectionFactory(configuration, clientConfiguration).apply {
             afterPropertiesSet()
