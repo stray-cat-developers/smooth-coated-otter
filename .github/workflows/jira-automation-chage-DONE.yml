@@ -51,9 +51,9 @@ jobs:
       - name: Call JIRA webhook
         if: steps.extract-tickets.outputs.found == 'true'
         run: |      
-          curl -X POST -H 'Content-type: application/json' \
+          curl -X POST -H 'Content-type: application/json' -H "X-Automation-Webhook-Token: ${{secrets.JIRA_HOOK_TOKEN_DONE}}" \
           --data '{"issues": ${{ fromJson(steps.extract-tickets.outputs.tickets) }}}' \
-          https://automation.atlassian.com/pro/hooks/ac86ed5b3824981ac57ecb07299eb12d1a61994f                  
+          https://api-private.atlassian.com/automation/webhooks/jira/a/5fe773a1-00a9-4110-a9dd-809c1b060fd0/01940744-d627-76bd-b1ec-880874a973fc
       # 결과 로깅
       - name: Log sync results
         run: |
