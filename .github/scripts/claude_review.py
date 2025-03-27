@@ -17,49 +17,45 @@ api_url = f"https://api.github.com/repos/{repo_name}"
 
 # PR의 변경 파일 가져오기
 headers = {
-    "Authorization": "token {github_token}",
+    "Authorization": f"token {github_token}",
     "Accept": "application/vnd.github.v3+json"
 }
-files_response = requests.get(f"{api_url}/pulls/{pr_number}/files", headers=headers)
-files = files_response.json()
 
-# Diff 내용 수집
-diff_content = ""
-for file in files:
-    diff_content += f"File: {file['filename']}\n{file.get('patch', '파일 내용 없음')}\n\n"
+# API 응답 디버깅
+print(f"PR 번호: {pr_number}")
+print(f"저장소명: {repo_name}")
 
-# Claude API 호출
-response = client.messages.create(
-    model="claude-3-7-sonnet-20250219",
-    max_tokens=4000,
-    messages=[
-        {"role": "user", "content": f"""
-        다음은 GitHub Pull Request #{pr_number}의 코드 변경사항입니다:
+try:
+    files_url = f"{api_url}/pulls/{pr_number}/files"
+    print(f"API 요청 URL: {files_url}")
 
-        ```diff
-        {diff_content}
-        ```
+    files_response = requests.get(files_url, headers=headers)
+    print(f"API 응답 상태 코드: {files_response.status_code}")
+    print(f"API 응답 내용: {files_response.text[:100]}...")  # 처음 100자만 출력
 
-        이 코드 변경에 대한 상세한 리뷰를 제공해주세요:
-        1. 코드 품질 평가
-        2. 잠재적 버그나 이슈 탐지
-        3. 성능 최적화 제안
-        4. 보안 고려사항
-        5. 코드 스타일 및 가독성 개선점
+    # 응답을 JSON으로 파싱
+    files = files_response.json()
+    print(f"파싱된 파일 개수: {len(files) if isinstance(files, list) else 'Not a list'}")
 
-        가능하면 구체적인 개선 제안도 함께 제공해주세요.
-        """}
-    ]
-)
+    # 파일 타입 확인
+    print(f"Files 타입: {type(files)}")
 
-review_comment = response.content[0].text
+    # Diff 내용 수집
+    diff_content = ""
+    if isinstance(files, list):
+        for file in files:
+            if isinstance(file, dict):
+                diff_content += f"File: {file.get('filename', 'Unknown')}\n{file.get('patch', '파일 내용 없음')}\n\n"
+            else:
+                print(f"Warning: file is not a dict: {type(file)}")
+    else:
+        diff_content = "파일 목록을 가져오는데 실패했습니다."
+        print(f"Error: files is not a list: {files}")
 
-# PR에 리뷰 코멘트 게시
-comment_data = {"body": review_comment}
-requests.post(
-    f"{api_url}/issues/{pr_number}/comments",
-    headers=headers,
-    json=comment_data
-)
+    # API 호출만 수행하고 종료 (디버깅용)
+    print("디버깅을 위해 여기서 종료합니다.")
+    exit(0)
 
-print("코드 리뷰가 PR에 게시되었습니다.")
+except Exception as e:
+    print(f"오류 발생: {str(e)}")
+    exit(1)
