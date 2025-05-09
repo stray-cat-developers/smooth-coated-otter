@@ -63,27 +63,23 @@ try:
     pr_description = pr_data.get('body', 'No description')
 
     # Claude API 호출
-    prompt = f"""
-    GitHub Pull Request #{pr_number} "{pr_title}"의 코드 리뷰를 수행해주세요.
-
-    PR 설명:
-    {pr_description}
-
-    변경된 파일 내용:
-    ```diff
-    {diff_content}
-    ```
-
-    이 코드 변경에 대한 상세한 리뷰를 한글로 제공해주세요:
-    1. 코드 품질 평가
-    2. 잠재적 버그나 이슈 탐지
-    3. 성능 최적화 제안
-    4. 보안 고려사항
-    5. 코드 스타일 및 가독성 개선점
-
-    가능하면 구체적인 개선 제안도 함께 제공해주세요.
-    코드 리뷰는 마크다운 형식으로 깔끔하게 작성해주세요.
-    """
+    # 외부 파일에서 프롬프트 템플릿 로드
+    prompt_file_path = os.path.join(os.path.dirname(__file__), 'prompt.txt')
+    try:
+        with open(prompt_file_path, 'r', encoding='utf-8') as file:
+            prompt_template = file.read()
+        print(f"프롬프트 템플릿을 '{prompt_file_path}'에서 성공적으로 로드했습니다.")
+    except Exception as e:
+        print(f"프롬프트 파일 로드 오류: {str(e)}")
+        exit(1)
+    
+    # format() 메서드로 값 채우기
+    prompt = prompt_template.format(
+        pr_number=pr_number,
+        pr_title=pr_title,
+        pr_description=pr_description,
+        diff_content=diff_content
+    )
 
     response = client.messages.create(
         model="claude-3-7-sonnet-20250219",
